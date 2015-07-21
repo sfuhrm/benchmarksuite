@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import lombok.Getter;
+import lombok.Setter;
 
 public class Benchmark<T> implements Runnable {
     /** Produces data for {@link #benchmark}. */
@@ -27,6 +28,7 @@ public class Benchmark<T> implements Runnable {
     private final long multiplicity;
     
     @Getter
+    @Setter
     private String id;
     
     private final List<Long> nanoTimes;
