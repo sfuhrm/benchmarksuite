@@ -9,7 +9,7 @@ public class BenchmarkRunner implements Runnable {
     @Getter
     private final List<Benchmark> benchmarks;
 
-    private final int BATCH_SIZE = 4;
+    private final int BATCH_SIZE = 100;
     private final int ITERATIONS_MAX = 100;
         
     public BenchmarkRunner(Collection<Benchmark> in) {

@@ -2,6 +2,7 @@ package de.tynne.streamperformance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
@@ -71,6 +72,10 @@ public class Benchmark<T> implements Runnable {
 
     public DoubleStream getNanoTimes() {
         return nanoTimes.stream().mapToDouble(s -> (double)s / (double)(times*multiplicity));
+    }
+    
+    public OptionalDouble getMedian() {
+        return getNanoTimes().sorted().skip(nanoTimes.size()/2).findFirst();
     }
 
     @Override

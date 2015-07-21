@@ -23,7 +23,7 @@ public class Main {
         File out = new File("out.csv");
         BackupHelper.backupIfNeeded(out);
         
-        final CSVFormat format = CSVFormat.EXCEL.withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
+        final CSVFormat format = CSVFormat.EXCEL.withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(out), Charset.forName("UTF-8")), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             BenchmarkRunner benchmarkRunner = new BenchmarkRunner(benchmarks);
@@ -39,6 +39,7 @@ public class Main {
                             printer.print(b.getName());
                             printer.print(doubleSummaryStatistics.getMin());
                             printer.print(doubleSummaryStatistics.getAverage());
+                            printer.print(b.getMedian().getAsDouble());
                             printer.print(doubleSummaryStatistics.getMax());
                             printer.print(chart.getChart().get(b).chartPosition);
                             double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
