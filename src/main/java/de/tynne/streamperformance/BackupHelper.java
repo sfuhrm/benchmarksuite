@@ -20,7 +20,7 @@ public class BackupHelper {
     private final static String BAK_SUFFIX = ".bak-";
     
     public static void backupIfNeeded(File f) throws IOException {
-        if (f.exists()) {
+        if (f.exists() && f.length() > 0) {
             File backupName = backupNameFor(f);
             f.renameTo(backupName);
         }
