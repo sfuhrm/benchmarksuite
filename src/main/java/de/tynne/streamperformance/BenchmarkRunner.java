@@ -9,8 +9,9 @@ public class BenchmarkRunner implements Runnable {
     @Getter
     private final List<Benchmark> benchmarks;
 
-    private final int BATCH_SIZE = 100;
-    private final int ITERATIONS_MAX = 100;
+    private final long SEC_IN_NANOS = 1_000_000l;
+    private final long WARMUP_TIME_NANOS = 5l*SEC_IN_NANOS;
+    private final long RUN_TIME_NANOS = 30l*SEC_IN_NANOS;
         
     public BenchmarkRunner(Collection<Benchmark> in) {
         this.benchmarks = new ArrayList<>(in);
@@ -22,28 +23,22 @@ public class BenchmarkRunner implements Runnable {
         int total = benchmarks.size();
         
         for (Benchmark b : benchmarks) {
-            System.err.printf("%d / %d (%g%%) (%s)\n", progress, total, (100.*progress)/total, b.getId());
-            boolean warm = false;
+            System.err.printf("%d / %d (%g%%) (%s, %s), WARMUP\n", progress, total, (100.*progress)/total, b.getId(), b.getName());
             
-            int iterations = 0;
-            
-            do {
+            long start = System.nanoTime();
+            while ((System.nanoTime() - start) < WARMUP_TIME_NANOS) {
                 b.reset();
                 
                 // warm up the jit
-                for (int i=0; i < BATCH_SIZE; i++) {
-                    b.run();                
-                }
-                
-                double min = b.getNanoTimes().min().getAsDouble();
-                double max = b.getNanoTimes().max().getAsDouble();
-                double diff = Math.abs(max - min);
-                double dev = (double)diff / (double)max;
-                System.out.printf("%s: %d. Dev: %g\n", b.getId(), iterations, dev);
-                warm = dev  < 0.01;
-                iterations++;
-            } while (!warm && iterations < ITERATIONS_MAX);
-            System.err.printf("%s: Warm after %d iterations.", b.getId(), iterations);
+                b.run();                
+            }
+            
+            System.err.printf("%d / %d (%g%%) (%s, %s), MAIN RUN\n", progress, total, (100.*progress)/total, b.getId(), b.getName());
+            b.reset();
+            start = System.nanoTime();
+            while ((System.nanoTime() - start) < RUN_TIME_NANOS) {
+                b.run();
+            }
             progress++;
         }
     }
