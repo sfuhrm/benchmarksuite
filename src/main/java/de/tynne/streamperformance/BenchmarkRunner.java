@@ -22,7 +22,7 @@ public class BenchmarkRunner implements Runnable {
         int total = benchmarks.size();
         
         for (Benchmark b : benchmarks) {
-            System.err.printf("%d / %d (%g%%).", progress, total, (100.*progress)/total);
+            System.err.printf("%d / %d (%g%%) (%s)\n", progress, total, (100.*progress)/total, b.getId());
             boolean warm = false;
             
             int iterations = 0;
@@ -39,11 +39,11 @@ public class BenchmarkRunner implements Runnable {
                 double max = b.getNanoTimes().max().getAsDouble();
                 double diff = Math.abs(max - min);
                 double dev = (double)diff / (double)max;
-                System.out.printf("%d. Dev: %g\n", iterations, dev);
+                System.out.printf("%s: %d. Dev: %g\n", b.getId(), iterations, dev);
                 warm = dev  < 0.01;
                 iterations++;
             } while (!warm && iterations < ITERATIONS_MAX);
-            System.err.println("Warm after "+iterations+" iterations.");
+            System.err.printf("%s: Warm after %d iterations.", b.getId(), iterations);
             progress++;
         }
     }
