@@ -63,9 +63,76 @@ public class MinimumJ8Benchmarks implements BenchmarkProducer {
                     }
                 }
             }),
+            bench(
+                "F"+suffix,
+                "Plain old for loop with dual-threading with %d", longs,
+                        (l) -> {
+                            findMinimumShardedWithThreading(l, 2);
+            }),
+            bench(
+                "G"+suffix,
+                "Plain old for loop with quad-threading with %d", longs,
+                        (l) -> {
+                            findMinimumShardedWithThreading(l, 4);
+            }),
         };
 
         return Arrays.asList(benchmarks);    
+    }
+    
+    /** Dirty implementation of a multi threaded sharding approach. */
+    private static long findMinimumShardedWithThreading(List<Long> longs, int threads) {
+        List<MinFinder> finders = new ArrayList<>();
+        int count = longs.size() / threads;
+        int offset = 0;
+        for (int i = 0; i < threads; i++) {
+            
+            if (i == threads - 1) {
+                // correct count for potential rounding errors
+                count = longs.size() - offset;
+            }
+            MinFinder finder = new MinFinder(longs, offset, count);
+            finder.start();
+            finders.add(finder);
+        }
+        
+        Long min = null;
+        for (MinFinder f : finders) {
+            try {
+                f.join();
+                if (min == null) {
+                    min = f.minimum;
+                } else {                    
+                    min = Math.min(f.minimum, min);
+                }
+            } catch (InterruptedException ex) {
+            }
+        }
+        return min;
+    }
+    
+    private static class MinFinder extends Thread {
+        private final List<Long> longs;
+        private Long minimum;
+        private final int startOffset;
+        private final int count;
+
+        public MinFinder(List<Long> longs, int startOffset, int count) {
+            this.longs = longs;
+            this.startOffset = startOffset;
+            this.count = count;
+        }
+        
+        @Override
+        public void run() {
+            minimum = longs.get(0);
+            for (int i = 0; i < count; i++) {
+                Long cur = longs.get(i + startOffset);
+                if (cur.compareTo(minimum) < 0) {
+                    minimum = cur;
+                }
+            }            
+        }
     }
     
     @Override
