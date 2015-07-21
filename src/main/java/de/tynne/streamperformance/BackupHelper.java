@@ -39,6 +39,6 @@ public class BackupHelper {
         String timePart = dateFormat.format(fileTime.toMillis());
         
         nameBuilder.append(timePart);
-        return f;
+        return new File(f.getParentFile(), nameBuilder.toString());
     }
 }
