@@ -17,8 +17,12 @@ public class BenchmarkRunner implements Runnable {
     
     @Override
     public void run() {
+        int progress = 0;
+        int warmups = 0;
+        int total = benchmarks.size();
+        
         for (Benchmark b : benchmarks) {
-            
+            System.err.printf("%d / %d (%g%%).", progress, total, (100.*progress)/total);
             boolean warm = false;
             
             int iterations = 0;
@@ -39,7 +43,9 @@ public class BenchmarkRunner implements Runnable {
                 warm = dev  < 0.01;
                 iterations++;
             } while (!warm);
-            System.err.println("Warm after "+iterations+" iterations.");            
+            System.err.println("Warm after "+iterations+" iterations.");
+            warmups += Math.max(0, iterations - 1);
+            progress++;
         }
     }
 }
