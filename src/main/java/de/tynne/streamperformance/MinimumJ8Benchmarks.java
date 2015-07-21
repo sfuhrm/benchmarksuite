@@ -67,13 +67,13 @@ public class MinimumJ8Benchmarks implements BenchmarkProducer {
                 "F"+suffix,
                 "Plain old for loop with dual-threading with %d", longs,
                         (l) -> {
-                            findMinimumShardedWithThreading(l, 2);
+                            findMinimumSlicedWithThreading(l, 2);
             }),
             bench(
                 "G"+suffix,
                 "Plain old for loop with quad-threading with %d", longs,
                         (l) -> {
-                            findMinimumShardedWithThreading(l, 4);
+                            findMinimumSlicedWithThreading(l, 4);
             }),
         };
 
@@ -81,7 +81,7 @@ public class MinimumJ8Benchmarks implements BenchmarkProducer {
     }
     
     /** Dirty implementation of a multi threaded sharding approach. */
-    private static long findMinimumShardedWithThreading(List<Long> longs, int threads) {
+    private static long findMinimumSlicedWithThreading(List<Long> longs, int threads) {
         List<MinFinder> finders = new ArrayList<>();
         int count = longs.size() / threads;
         int offset = 0;
@@ -94,6 +94,7 @@ public class MinimumJ8Benchmarks implements BenchmarkProducer {
             MinFinder finder = new MinFinder(longs, offset, count);
             finder.start();
             finders.add(finder);
+            offset += count;
         }
         
         Long min = null;
