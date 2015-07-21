@@ -126,8 +126,8 @@ public class MinimumJ8Benchmarks implements BenchmarkProducer {
         
         @Override
         public void run() {
-            minimum = longs.get(0);
-            for (int i = 0; i < count; i++) {
+            minimum = longs.get(startOffset);
+            for (int i = 1; i < count; i++) {
                 Long cur = longs.get(i + startOffset);
                 if (cur.compareTo(minimum) < 0) {
                     minimum = cur;
