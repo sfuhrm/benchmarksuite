@@ -16,12 +16,14 @@ import org.apache.commons.csv.CSVPrinter;
  * @author fury
  */
 public class Main {
+    
     public static void main(String[] args) throws FileNotFoundException, IOException {        
         BenchmarkProducer benchmarkProducer = new MinimumJ8Benchmarks();
                
         File out = new File("out.csv");
-  
-        final CSVFormat format = CSVFormat.EXCEL.withHeader("ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
+        BackupHelper.backupIfNeeded(out);
+        
+        final CSVFormat format = CSVFormat.EXCEL.withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(out), Charset.forName("UTF-8")), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             BenchmarkRunner benchmarkRunner = new BenchmarkRunner(benchmarks);
@@ -32,6 +34,7 @@ public class Main {
                     b -> {
                         try {
                             DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
+                            printer.print(benchmarks.indexOf(b));
                             printer.print(b.getId());
                             printer.print(b.getName());
                             printer.print(doubleSummaryStatistics.getMin());
