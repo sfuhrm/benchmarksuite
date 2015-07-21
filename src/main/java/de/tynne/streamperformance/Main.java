@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.function.Consumer;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
