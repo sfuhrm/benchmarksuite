@@ -26,13 +26,19 @@ public class Benchmark<T> implements Runnable {
     @Getter
     private final long multiplicity;
     
+    @Getter
+    private String id;
+    
     private final List<Long> nanoTimes;
+    
+    private final static IDGenerator GENERATOR = new IDGenerator();
 
     public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name) {
         this(init, benchmark, name, 1000, 1);
     }
     
     public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name, int times, long multiplicity) {
+        this.id = "A"+GENERATOR.generate().toString();
         this.init = init;
         this.benchmark = benchmark;
         this.name = name;
