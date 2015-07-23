@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -23,23 +24,25 @@ public class Main {
         }
         
         BenchmarkProducer benchmarkProducer = new MinimumJ8Benchmarks();
-               
+        
+
         BackupHelper.backupIfNeeded(args.getOutput());
         
         final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
-            BenchmarkRunner benchmarkRunner = new BenchmarkRunner(benchmarks, 
+            List<Benchmark> matching = benchmarks.stream().filter(b -> args.getExecute().matcher(b.getId()).matches()).collect(Collectors.toList());
+            BenchmarkRunner benchmarkRunner = new BenchmarkRunner(matching, 
                     BenchmarkRunner.SEC_IN_NANOS * args.getWarumUpTime(), 
                     BenchmarkRunner.SEC_IN_NANOS * args.getRunTime());
             benchmarkRunner.run();
-            Chart chart = Chart.of(benchmarks);
+            Chart chart = Chart.of(matching);
             
             chart.getPerformanceChart().stream().forEach(
                     b -> {
                         try {
                             DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
-                            printer.print(benchmarks.indexOf(b));
+                            printer.print(matching.indexOf(b));
                             printer.print(b.getId());
                             printer.print(b.getName());
                             printer.print(doubleSummaryStatistics.getMin());

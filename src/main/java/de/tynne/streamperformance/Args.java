@@ -6,6 +6,7 @@
 package de.tynne.streamperformance;
 
 import java.io.File;
+import java.util.regex.Pattern;
 import lombok.Getter;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -35,6 +36,10 @@ public class Args {
     @Getter
     @Option(name = "-charset", aliases = {"-c"}, usage = "Output CSV file charset to use.")
     private String charset = "ISO-8859-15";
+    
+    @Getter
+    @Option(name = "-execute", aliases = {"-e"}, usage = "Regex defining which benchmark IDs to execute.")
+    private Pattern execute = Pattern.compile(".*");
     
     @Getter
     @Option(name = "-help", aliases = {"-h"}, usage = "Show this command line help.", help = true)
