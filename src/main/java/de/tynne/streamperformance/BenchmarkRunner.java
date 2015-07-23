@@ -9,12 +9,15 @@ public class BenchmarkRunner implements Runnable {
     @Getter
     private final List<Benchmark> benchmarks;
 
-    private final long SEC_IN_NANOS = 1_000_000_000l;
-    private final long WARMUP_TIME_NANOS = 5l*SEC_IN_NANOS;
-    private final long RUN_TIME_NANOS = 30l*SEC_IN_NANOS;
+    static final long SEC_IN_NANOS = 1_000_000_000l;
         
-    public BenchmarkRunner(Collection<Benchmark> in) {
+    private final long warmupTimeNanos;
+    private final long runTimeNanos;
+    
+    public BenchmarkRunner(Collection<Benchmark> in, long warmupTimeNanos, long runTimeNanos) {
         this.benchmarks = new ArrayList<>(in);
+        this.warmupTimeNanos = warmupTimeNanos;
+        this.runTimeNanos = runTimeNanos;
     }
     
     @Override
@@ -22,7 +25,7 @@ public class BenchmarkRunner implements Runnable {
         int progress = 0;
         int total = benchmarks.size();
         
-        long totalTimeSecs = total * (WARMUP_TIME_NANOS + RUN_TIME_NANOS) / SEC_IN_NANOS;
+        long totalTimeSecs = total * (warmupTimeNanos + runTimeNanos) / SEC_IN_NANOS;
         long totalStart = System.nanoTime();
         
         for (Benchmark b : benchmarks) {
@@ -31,7 +34,7 @@ public class BenchmarkRunner implements Runnable {
                     b, elapsed, totalTimeSecs, "WARUMP");
             
             long start = System.nanoTime();
-            while ((System.nanoTime() - start) < WARMUP_TIME_NANOS) {
+            while ((System.nanoTime() - start) < warmupTimeNanos) {
                 b.reset();
                 
                 // warm up the jit
@@ -43,7 +46,7 @@ public class BenchmarkRunner implements Runnable {
                     b, elapsed, totalTimeSecs, "MAIN RUN");
             b.reset();
             start = System.nanoTime();
-            while ((System.nanoTime() - start) < RUN_TIME_NANOS) {
+            while ((System.nanoTime() - start) < runTimeNanos) {
                 b.run();
             }
             progress++;

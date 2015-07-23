@@ -1,6 +1,5 @@
 package de.tynne.streamperformance;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,16 +16,22 @@ import org.apache.commons.csv.CSVPrinter;
  */
 public class Main {
     
-    public static void main(String[] args) throws FileNotFoundException, IOException {        
+    public static void main(String[] cmdLine) throws FileNotFoundException, IOException {  
+        Args args = Args.parse(cmdLine);
+        if (args == null) {
+            return;
+        }
+        
         BenchmarkProducer benchmarkProducer = new MinimumJ8Benchmarks();
                
-        File out = new File("out.csv");
-        BackupHelper.backupIfNeeded(out);
+        BackupHelper.backupIfNeeded(args.getOutput());
         
-        final CSVFormat format = CSVFormat.EXCEL.withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
-        try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(out), Charset.forName("UTF-8")), format)) {
+        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
+        try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
-            BenchmarkRunner benchmarkRunner = new BenchmarkRunner(benchmarks);
+            BenchmarkRunner benchmarkRunner = new BenchmarkRunner(benchmarks, 
+                    BenchmarkRunner.SEC_IN_NANOS * args.getWarumUpTime(), 
+                    BenchmarkRunner.SEC_IN_NANOS * args.getRunTime());
             benchmarkRunner.run();
             Chart chart = Chart.of(benchmarks);
             
