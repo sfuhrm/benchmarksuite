@@ -2,7 +2,11 @@ package de.tynne.streamperformance;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -21,8 +25,21 @@ public class BenchmarkRunner implements Runnable {
         log.debug("Init with {} benchmarks", in.size());
         
         this.benchmarks = new ArrayList<>(in);
+        checkIdUnique(benchmarks);
         this.warmupTimeNanos = warmupTimeNanos;
         this.runTimeNanos = runTimeNanos;
+    }
+    
+    private static void checkIdUnique(Collection<Benchmark> in) {
+        List<String> idList = in.stream().map(b -> b.getId()).collect(Collectors.toList());
+        Set<String> idSet = new HashSet<String>(idList);
+        
+        if (idList.size() != idSet.size()) {
+            Map<String,Long> histo = idList.stream().collect(Collectors.groupingBy(b -> b, Collectors.counting()));
+            List<String> multiList = histo.entrySet().stream().filter(e -> e.getValue() > 1).map(e -> e.getKey()).collect(Collectors.toList());
+            
+            throw new IllegalArgumentException("Non unique ids: "+multiList);
+        }
     }
     
     @Override
