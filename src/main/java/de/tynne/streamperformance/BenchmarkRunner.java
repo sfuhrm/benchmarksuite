@@ -41,13 +41,14 @@ public class BenchmarkRunner implements Runnable {
             printProgress(progress, total,
                     b, elapsed, totalTimeSecs, "WARUMP");
             
+            b.reset();
             long start = System.nanoTime();
             while ((System.nanoTime() - start) < warmupTimeNanos) {
-                b.reset();
-                
                 // warm up the jit
                 b.run();                
             }
+            
+            log.info("Warmup stats: {}", b);
             
             elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
             printProgress(progress, total,
@@ -57,6 +58,9 @@ public class BenchmarkRunner implements Runnable {
             while ((System.nanoTime() - start) < runTimeNanos) {
                 b.run();
             }
+            
+            log.info("Run stats: {}", b);
+            
             progress++;
         }
         MDC.remove("benchmark");
