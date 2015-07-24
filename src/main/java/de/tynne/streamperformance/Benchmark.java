@@ -38,10 +38,14 @@ public class Benchmark<T> implements Runnable {
     
     private final static IDGenerator GENERATOR = new IDGenerator();
 
-    public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name) {
-        this(init, benchmark, name, 1000, 1);
-    }
-    
+    /**
+     * Creates a new benchmark.
+     * @param init non-benchmarked initialization routing creating the object for the benchmark to use.
+     * @param benchmark the benchmarked code using the result of the init routine.
+     * @param name the benchmark name.
+     * @param times execute this often the benchmark code in one run.
+     * @param multiplicity this is the number of elements the benchmark processes itself.
+     */
     public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name, int times, long multiplicity) {
         this.id = "A"+GENERATOR.generate().toString();
         this.init = init;
