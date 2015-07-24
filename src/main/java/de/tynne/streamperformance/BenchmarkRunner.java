@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 
-public class BenchmarkRunner implements Runnable {
+@Slf4j
+public class BenchmarkRunner implements Runnable {    
     @Getter
     private final List<Benchmark> benchmarks;
 
@@ -15,6 +18,8 @@ public class BenchmarkRunner implements Runnable {
     private final long runTimeNanos;
     
     public BenchmarkRunner(Collection<Benchmark> in, long warmupTimeNanos, long runTimeNanos) {
+        log.debug("Init with {} benchmarks", in.size());
+        
         this.benchmarks = new ArrayList<>(in);
         this.warmupTimeNanos = warmupTimeNanos;
         this.runTimeNanos = runTimeNanos;
@@ -29,6 +34,9 @@ public class BenchmarkRunner implements Runnable {
         long totalStart = System.nanoTime();
         
         for (Benchmark b : benchmarks) {
+            MDC.put("benchmark", b.getId());
+            log.debug("Benchmark {}: {}", b.getId(), b.getName());
+            
             long elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
             printProgress(progress, total,
                     b, elapsed, totalTimeSecs, "WARUMP");
@@ -51,6 +59,7 @@ public class BenchmarkRunner implements Runnable {
             }
             progress++;
         }
+        MDC.remove("benchmark");
     }
 
     private void printProgress(int progress, int total, Benchmark b, long elapsed, long totalTimeSecs, String phase) {

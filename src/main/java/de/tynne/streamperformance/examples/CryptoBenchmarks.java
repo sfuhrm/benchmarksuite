@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author fury
  */
+@Slf4j
 public class CryptoBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();
@@ -41,6 +43,7 @@ public class CryptoBenchmarks implements BenchmarkProducer {
                 random.nextBytes(data);
                 return data;
         };
+        log.debug("Creating id {} with provider {}, md {} and size {}", id, provider.getName(), digest.getAlgorithm(), data.length);
         Benchmark b = new Benchmark<>(supplier, new MessageDigestConsumer(digest), provider.getName()+" "+digest.getAlgorithm() + " " + data.length, times, data.length);
         b.setId(id);
         return b;
@@ -71,6 +74,8 @@ public class CryptoBenchmarks implements BenchmarkProducer {
             }
             p++;
         }
+        
+        log.debug("Benchmark count: {}", benchmarks.size());
         
         return benchmarks;
     }

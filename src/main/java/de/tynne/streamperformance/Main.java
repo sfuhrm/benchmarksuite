@@ -1,5 +1,6 @@
 package de.tynne.streamperformance;
 
+import de.tynne.streamperformance.examples.CryptoBenchmarks;
 import de.tynne.streamperformance.examples.JDK8StreamBenchmarks;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,7 +31,7 @@ public class Main {
             return;
         }
         
-        BenchmarkProducer benchmarkProducer = new JDK8StreamBenchmarks();
+        BenchmarkProducer benchmarkProducer = new CryptoBenchmarks(); //new JDK8StreamBenchmarks();
 
         BackupHelper.backupIfNeeded(args.getOutput());
         
