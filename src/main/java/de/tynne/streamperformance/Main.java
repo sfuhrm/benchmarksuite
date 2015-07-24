@@ -48,6 +48,7 @@ public class Main {
 
         BackupHelper.backupIfNeeded(args.getOutput());
         
+        // this looks like NOT comma seperated values, but excel and libreoffice load this automatically
         final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Std Dev [ns]", "Chart Pos", "Rel Increase [%]", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
