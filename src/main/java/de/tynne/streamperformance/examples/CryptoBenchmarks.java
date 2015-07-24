@@ -68,6 +68,7 @@ public class CryptoBenchmarks implements BenchmarkProducer {
                         s++;
                     } catch (NoSuchAlgorithmException ex) {
                         ex.printStackTrace();
+                        log.error("No such algo for "+service.getAlgorithm(), ex);
                     }
                 }
             }
