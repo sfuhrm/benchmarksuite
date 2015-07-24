@@ -44,6 +44,10 @@ public class Args {
     private boolean list;
     
     @Getter
+    @Option(name = "-checkNano", aliases = {"-C"}, usage = "Check nano timing of JDK")
+    private boolean checkNano;
+    
+    @Getter
     @Option(name = "-help", aliases = {"-h"}, usage = "Show this command line help.", help = true)
     private boolean help;
         
