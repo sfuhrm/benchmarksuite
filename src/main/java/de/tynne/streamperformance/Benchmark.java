@@ -19,11 +19,7 @@ public class Benchmark<T> implements Runnable {
     private final Consumer<T> benchmark;
     
     @Getter
-    private final String name;
-    
-    /** Execute the benchmark this often for sake of statistic stability. */
-    @Getter
-    private final int times;
+    private final String name;    
     
     /** The multiplicity of the benchmark. This is how many elements were processed.
      * The results get divided by this number. */
@@ -46,16 +42,15 @@ public class Benchmark<T> implements Runnable {
      * @param times execute this often the benchmark code in one run.
      * @param multiplicity this is the number of elements the benchmark processes itself.
      */
-    public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name, int times, long multiplicity) {
+    public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name, long multiplicity) {
         this.id = "A"+GENERATOR.generate().toString();
         this.init = init;
         this.benchmark = benchmark;
         this.name = name;
-        this.times = times;
         this.multiplicity = multiplicity;
-        this.nanoTimes = new ArrayList<>(times);
+        this.nanoTimes = new ArrayList<>();
         
-        log.debug("Created {} with times={} and multiplicity={}", name, times, multiplicity);
+        log.debug("Created {} with multiplicity={}", name, multiplicity);
     }
     
     public void reset() {
@@ -63,23 +58,19 @@ public class Benchmark<T> implements Runnable {
     }
     
     @Override
-    public void run() {
-        long nanos = 0;
-        
-        for (int i=0; i < times; i++) {
-            T prep = init.get();
-            long startNanos = System.nanoTime();
-            benchmark.accept(prep);
-            long endNanos = System.nanoTime();
-            
-            nanos += endNanos - startNanos;
-        }
+    public void run() {      
+        T prep = init.get();
+        long startNanos = System.nanoTime();
+        benchmark.accept(prep);
+        long endNanos = System.nanoTime();
+
+        long nanos = endNanos - startNanos;
         
         nanoTimes.add(nanos);
     }
 
     public DoubleStream getNanoTimes() {
-        return nanoTimes.stream().mapToDouble(s -> (double)s / (double)(times*multiplicity));
+        return nanoTimes.stream().mapToDouble(s -> (double)s / (double)(multiplicity));
     }
     
     public OptionalDouble getMedian() {

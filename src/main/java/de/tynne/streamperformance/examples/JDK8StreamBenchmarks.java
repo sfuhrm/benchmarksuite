@@ -17,11 +17,10 @@ import java.util.stream.Collectors;
 public class JDK8StreamBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();
-    private final int times = 1000;
     
     private Benchmark bench(String id, String name, List<Long> source, Consumer<List<Long>> consumer)  {
         Supplier<List<Long>> supplier = () -> new ArrayList<>(source);
-        Benchmark b = new Benchmark<>(supplier, consumer, String.format(name, source.size()), times, source.size());
+        Benchmark b = new Benchmark<>(supplier, consumer, String.format(name, source.size()), source.size());
         b.setId(id);
         return b;
     }

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -25,6 +26,13 @@ public class Main {
         return Math.sqrt(sum);
     }
     
+    private static void listBenchmarks(BenchmarkProducer benchmarkProducer, PrintStream ps) {
+        benchmarkProducer.get().stream().forEach((b) -> 
+            ps.printf("%s: %s\n", b.getId(), b.getName())
+        );
+        ps.flush();
+    }
+    
     public static void main(String[] cmdLine) throws FileNotFoundException, IOException {  
         Args args = Args.parse(cmdLine);
         if (args == null) {
@@ -32,6 +40,11 @@ public class Main {
         }
         
         BenchmarkProducer benchmarkProducer = new CryptoBenchmarks(); //new JDK8StreamBenchmarks();
+        
+        if (args.isList()) {
+            listBenchmarks(benchmarkProducer, System.out);
+            return;
+        }
 
         BackupHelper.backupIfNeeded(args.getOutput());
         

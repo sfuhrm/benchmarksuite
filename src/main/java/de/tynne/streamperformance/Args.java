@@ -40,6 +40,10 @@ public class Args {
     private Pattern execute = Pattern.compile(".*");
     
     @Getter
+    @Option(name = "-list", aliases = {"-l"}, usage = "Show the available benchmarks and then exit")
+    private boolean list;
+    
+    @Getter
     @Option(name = "-help", aliases = {"-h"}, usage = "Show this command line help.", help = true)
     private boolean help;
         

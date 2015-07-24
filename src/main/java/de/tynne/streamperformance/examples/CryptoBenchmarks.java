@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CryptoBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();
-    private final int times = 1000;
 
     class MessageDigestConsumer implements Consumer<byte[]> {
 
@@ -44,7 +43,7 @@ public class CryptoBenchmarks implements BenchmarkProducer {
                 return data;
         };
         log.debug("Creating id {} with provider {}, md {} and size {}", id, provider.getName(), digest.getAlgorithm(), data.length);
-        Benchmark b = new Benchmark<>(supplier, new MessageDigestConsumer(digest), provider.getName()+" "+digest.getAlgorithm() + " " + data.length, times, data.length);
+        Benchmark b = new Benchmark<>(supplier, new MessageDigestConsumer(digest), provider.getName()+" "+digest.getAlgorithm() + " " + data.length, data.length);
         b.setId(id);
         return b;
     }
