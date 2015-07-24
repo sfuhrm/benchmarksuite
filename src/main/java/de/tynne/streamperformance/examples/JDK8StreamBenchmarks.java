@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * @author fury
  */
-public class MinimumJ8Benchmarks implements BenchmarkProducer {
+public class JDK8StreamBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();
     private final int times = 1000;
