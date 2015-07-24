@@ -8,11 +8,13 @@ import java.util.Map;
 import lombok.Getter;
 
 /**
- *
+ * A comparison chart for multiple benchmarks.
+ * @see #of(java.util.List) 
  * @author fury
  */
 public class Chart {
     
+    /** Single chart entry with comparative content. */
     public static class ChartEntry {
         @Getter
         private Benchmark benchmark;
