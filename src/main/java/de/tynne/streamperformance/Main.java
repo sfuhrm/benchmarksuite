@@ -1,5 +1,6 @@
 package de.tynne.streamperformance;
 
+import de.tynne.streamperformance.examples.MinimumJ8Benchmarks;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import org.apache.commons.csv.CSVPrinter;
 public class Main {
 
     private static double standardDeviationOf(DoubleStream doubleStream, double average) {
-        double sum = doubleStream.map(x -> Math.pow(x - average, 2.)).sum();
+        double sum = doubleStream.map(x -> Math.pow(x - average, 2.)).average().getAsDouble();
         return Math.sqrt(sum);
     }
     

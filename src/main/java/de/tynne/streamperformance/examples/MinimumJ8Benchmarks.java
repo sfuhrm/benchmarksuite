@@ -1,5 +1,7 @@
-package de.tynne.streamperformance;
+package de.tynne.streamperformance.examples;
 
+import de.tynne.streamperformance.Benchmark;
+import de.tynne.streamperformance.BenchmarkProducer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
