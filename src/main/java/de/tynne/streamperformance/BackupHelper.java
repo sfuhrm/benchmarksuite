@@ -10,18 +10,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author fury
  */
+@Slf4j
 public class BackupHelper {
     
     private final static String BAK_SUFFIX = ".bak-";
     
     public static void backupIfNeeded(File f) throws IOException {
+        log.debug("Checking for file {}", f.getAbsolutePath());
         if (f.exists() && f.length() > 0) {
             File backupName = backupNameFor(f);
+            log.debug("Renaming file {} to {}", f.getAbsolutePath(), backupName.getAbsolutePath());
             f.renameTo(backupName);
         }
     }
