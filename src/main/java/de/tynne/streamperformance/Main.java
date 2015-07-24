@@ -48,7 +48,7 @@ public class Main {
 
         BackupHelper.backupIfNeeded(args.getOutput());
         
-        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Std Dev [ns]", "Chart Pos", "Best Increase [%]");
+        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Std Dev [ns]", "Chart Pos", "Rel Increase [%]", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             List<Benchmark> matching = benchmarks.stream().filter(b -> args.getExecute().matcher(b.getId()).matches()).collect(Collectors.toList());
@@ -58,29 +58,31 @@ public class Main {
             benchmarkRunner.run();
             Chart chart = Chart.of(matching);
             
-            chart.getPerformanceChart().stream().forEach(
-                    b -> {
-                        try {
-                            DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
-                            printer.print(matching.indexOf(b));
-                            printer.print(b.getId());
-                            printer.print(b.getName());
-                            printer.print(doubleSummaryStatistics.getMin());
-                            printer.print(doubleSummaryStatistics.getAverage());
-                            printer.print(b.getMedian().getAsDouble());
-                            printer.print(doubleSummaryStatistics.getMax());
-                            printer.print(standardDeviationOf(b.getNanoTimes(), doubleSummaryStatistics.getAverage()));
-                            printer.print(chart.getChart().get(b).chartPosition);
-                            double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
-                            double thisAvg = doubleSummaryStatistics.getAverage();
-                            
-                            printer.print(100.*(thisAvg -bestAvg)/bestAvg);
-                            printer.println();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-            );
+            Benchmark pred = null;
+            for (Benchmark b : chart.getPerformanceChart()) {
+                try {
+                    DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
+                    printer.print(matching.indexOf(b));
+                    printer.print(b.getId());
+                    printer.print(b.getName());
+                    printer.print(doubleSummaryStatistics.getMin());
+                    printer.print(doubleSummaryStatistics.getAverage());
+                    printer.print(b.getMedian().getAsDouble());
+                    printer.print(doubleSummaryStatistics.getMax());
+                    printer.print(standardDeviationOf(b.getNanoTimes(), doubleSummaryStatistics.getAverage()));
+                    printer.print(chart.getChart().get(b).chartPosition);
+                    double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
+                    double thisAvg = doubleSummaryStatistics.getAverage();
+                    double predAvg = pred != null ? chart.getStats().get(pred).getAverage() : thisAvg;
+
+                    printer.print(100. * (thisAvg - predAvg) / predAvg);
+                    printer.print(100. * (thisAvg - bestAvg) / bestAvg);
+                    printer.println();
+                    pred = b;
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 }
