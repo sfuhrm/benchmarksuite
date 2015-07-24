@@ -8,7 +8,9 @@ import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Benchmark<T> implements Runnable {
     /** Produces data for {@link #benchmark}. */
     private final Supplier<T> init;
@@ -48,6 +50,8 @@ public class Benchmark<T> implements Runnable {
         this.times = times;
         this.multiplicity = multiplicity;
         this.nanoTimes = new ArrayList<>(times);
+        
+        log.debug("Created {} with times={} and multiplicity={}", name, times, multiplicity);
     }
     
     public void reset() {

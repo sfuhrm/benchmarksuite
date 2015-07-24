@@ -15,7 +15,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 /**
- *
+ * Command line arguments for running the benchmarks.
  * @author fury
  */
 @Slf4j

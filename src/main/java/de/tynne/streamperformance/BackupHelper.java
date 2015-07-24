@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *
+ * Some logic for backing up existing files.
  * @author fury
  */
 @Slf4j
