@@ -2,6 +2,7 @@ package de.tynne.benchmarksuite.examples;
 
 import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
+import de.tynne.benchmarksuite.BenchmarkSuite;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author fury
  */
+@BenchmarkSuite(name = "JDK8Streams")
 public class JDK8StreamBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();

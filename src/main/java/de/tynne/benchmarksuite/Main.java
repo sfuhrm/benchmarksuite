@@ -1,8 +1,5 @@
 package de.tynne.benchmarksuite;
 
-import de.tynne.benchmarksuite.examples.CryptoBenchmarks;
-import de.tynne.benchmarksuite.examples.JDK8StreamBenchmarks;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -10,12 +7,17 @@ import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 import java.util.List;
 import java.util.LongSummaryStatistics;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.reflections.Reflections;
 
 /**
  *
@@ -31,6 +33,23 @@ public class Main {
     private static void listBenchmarks(BenchmarkProducer benchmarkProducer, PrintStream ps) {
         benchmarkProducer.get().stream().forEach((b) -> 
             ps.printf("%s: %s\n", b.getId(), b.getName())
+        );
+        ps.flush();
+    }
+    
+    private static String nameFor(BenchmarkSuite benchmarkSuite, BenchmarkProducer benchmarkProducer) {
+        if (benchmarkSuite.name().isEmpty()) {
+            return benchmarkProducer.getClass().getSimpleName();
+        } else
+            return benchmarkSuite.name();
+    }
+    
+    private static void listSuites(Map<BenchmarkSuite, BenchmarkProducer> suites, PrintStream ps) {
+        suites.entrySet().stream().forEach((e) -> {
+            ps.printf("%s: %s\n", 
+                    nameFor(e.getKey(), e.getValue()), 
+                            e.getKey().enabled());
+        }
         );
         ps.flush();
     }
@@ -99,15 +118,40 @@ public class Main {
         }
     }
     
-    public static void main(String[] cmdLine) throws FileNotFoundException, IOException {  
+    private static Optional<BenchmarkProducer> findByName(String suite, Map<BenchmarkSuite, BenchmarkProducer> suites) {
+        return suites.entrySet().stream().filter(e -> nameFor(e.getKey(), e.getValue()).equalsIgnoreCase(suite)).map(e -> e.getValue()).findFirst();
+    }
+    
+    private static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites() throws InstantiationException, IllegalAccessException {
+        Reflections reflections = new Reflections("de.tynne.benchmarksuite");
+
+        Set<Class<?>> benchmarkSuites = reflections.getTypesAnnotatedWith(BenchmarkSuite.class);
+        
+        Map<BenchmarkSuite, BenchmarkProducer> result = new HashMap<>();
+        for (Class<?> clazz : benchmarkSuites) {
+            BenchmarkSuite benchmarkSuite = clazz.getAnnotation(BenchmarkSuite.class);
+            BenchmarkProducer benchmarkProducer = clazz.asSubclass(BenchmarkProducer.class).newInstance();
+            result.put(benchmarkSuite, benchmarkProducer);
+        }
+        return result;
+    }
+    
+    public static void main(String[] cmdLine) throws Exception {  
         Args args = Args.parse(cmdLine);
         if (args == null) {
             return;
         }
         
-        BenchmarkProducer benchmarkProducer = new CryptoBenchmarks(); //new JDK8StreamBenchmarks();
+        Map<BenchmarkSuite, BenchmarkProducer> suites = getBenchmarkSuites();
+        if (args.isListSuites()) {
+            listSuites(suites, System.out);
+            return;
+        }
         
-        if (args.isList()) {
+        
+        BenchmarkProducer benchmarkProducer = findByName(args.getSuite(), suites).get();
+        
+        if (args.isListBenchmarks()) {
             listBenchmarks(benchmarkProducer, System.out);
             return;
         }

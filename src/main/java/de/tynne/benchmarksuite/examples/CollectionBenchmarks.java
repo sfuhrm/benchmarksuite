@@ -2,6 +2,7 @@ package de.tynne.benchmarksuite.examples;
 
 import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
+import de.tynne.benchmarksuite.BenchmarkSuite;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,10 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-/**
- *
- * @author fury
- */
+@BenchmarkSuite(name = "Collections")
 public class CollectionBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();

@@ -2,6 +2,7 @@ package de.tynne.benchmarksuite.examples;
 
 import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
+import de.tynne.benchmarksuite.BenchmarkSuite;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author fury
  */
 @Slf4j
+@BenchmarkSuite(name = "MessageDigests")
 public class CryptoBenchmarks implements BenchmarkProducer {
 
     private final Random random = new Random();

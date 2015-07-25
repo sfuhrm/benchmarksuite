@@ -40,8 +40,16 @@ public class Args {
     private Pattern execute = Pattern.compile(".*");
     
     @Getter
-    @Option(name = "-list", aliases = {"-l"}, usage = "Show the available benchmarks and then exit")
-    private boolean list;
+    @Option(name = "-list-suites", aliases = {"-L"}, usage = "Show the available benchmark suites and then exit")
+    private boolean listSuites;
+    
+    @Getter
+    @Option(name = "-suite", aliases = {"-s"}, usage = "The benchmark suite to execute benchmarks of.")
+    private String suite;
+    
+    @Getter
+    @Option(name = "-list-benchmarks", aliases = {"-l"}, usage = "Show the available benchmarks and then exit")
+    private boolean listBenchmarks;
     
     @Getter
     @Option(name = "-checkNano", aliases = {"-C"}, usage = "Check nano timing of JDK")
@@ -64,6 +72,12 @@ public class Args {
             showHelp |= result.help;
             
             result.logProperties();
+            
+            if (result.suite == null && ! result.listSuites) {
+                System.err.println("Need a suite specified.");
+                showHelp = true;
+            }
+            
         } catch (CmdLineException ex) {
             System.err.println(ex.getMessage());
             showHelp = true;
