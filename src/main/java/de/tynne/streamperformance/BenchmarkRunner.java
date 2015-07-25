@@ -21,8 +21,15 @@ public class BenchmarkRunner implements Runnable {
     private final long warmupTimeNanos;
     private final long runTimeNanos;
     
+    @Getter
+    private final NullBenchmark nullBenchmark;
+    
+    private final static boolean RUN_NULL_BENCHMARK = true;
+    
     public BenchmarkRunner(Collection<Benchmark> in, long warmupTimeNanos, long runTimeNanos) {
         log.debug("Init with {} benchmarks", in.size());
+        
+        nullBenchmark = new NullBenchmark();
         
         this.benchmarks = new ArrayList<>(in);
         checkIdUnique(benchmarks);
@@ -45,42 +52,54 @@ public class BenchmarkRunner implements Runnable {
     @Override
     public void run() {
         int progress = 0;
-        int total = benchmarks.size();
+        // all benchmarks plus null
+        int total = benchmarks.size() + 1;
         
         long totalTimeSecs = total * (warmupTimeNanos + runTimeNanos) / SEC_IN_NANOS;
         long totalStart = System.nanoTime();
         
+        if (RUN_NULL_BENCHMARK) {
+            measureBenchmark(nullBenchmark, totalStart, progress, total, totalTimeSecs);
+        }
+        
         for (Benchmark b : benchmarks) {
-            MDC.put("benchmark", b.getId());
-            log.debug("Benchmark {}: {}", b.getId(), b.getName());
-            
-            long elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
-            printProgress(progress, total,
-                    b, elapsed, totalTimeSecs, "WARUMP");
-            
-            b.reset();
-            long start = System.nanoTime();
-            while ((System.nanoTime() - start) < warmupTimeNanos) {
-                // warm up the jit
-                b.run();                
+            if (RUN_NULL_BENCHMARK) {
+                b.setNullBenchmark(nullBenchmark);
             }
-            
-            log.info("Warmup stats: {}", b);
-            
-            elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
-            printProgress(progress, total,
-                    b, elapsed, totalTimeSecs, "MAIN RUN");
-            b.reset();
-            start = System.nanoTime();
-            while ((System.nanoTime() - start) < runTimeNanos) {
-                b.run();
-            }
-            
-            log.info("Run stats: {}", b);
-            
-            progress++;
+            measureBenchmark(b, totalStart, progress, total, totalTimeSecs);
         }
         MDC.remove("benchmark");
+    }
+
+    private void measureBenchmark(Benchmark b, long totalStart, int progress, int total, long totalTimeSecs) throws IllegalArgumentException {
+        MDC.put("benchmark", b.getId());
+        log.debug("Benchmark {}: {}", b.getId(), b.getName());
+        
+        long elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
+        printProgress(progress, total,
+                b, elapsed, totalTimeSecs, "WARUMP");
+        
+        b.reset();
+        long start = System.nanoTime();
+        while ((System.nanoTime() - start) < warmupTimeNanos) {
+            // warm up the jit
+            b.run();
+        }
+        
+        log.info("Warmup stats: {}", b);
+        
+        elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
+        printProgress(progress, total,
+                b, elapsed, totalTimeSecs, "MAIN RUN");
+        b.reset();
+        start = System.nanoTime();
+        while ((System.nanoTime() - start) < runTimeNanos) {
+            b.run();
+        }
+        
+        log.info("Run stats: {}", b);
+        
+        progress++;
     }
 
     private void printProgress(int progress, int total, Benchmark b, long elapsed, long totalTimeSecs, String phase) {

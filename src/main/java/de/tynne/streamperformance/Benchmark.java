@@ -33,6 +33,11 @@ public class Benchmark<T> implements Runnable {
     private final List<Long> nanoTimes;
     
     private final static IDGenerator GENERATOR = new IDGenerator();
+    
+    /** Optional null benchmark that will be used to correct the times to netto times.
+     */
+    @Getter @Setter
+    private NullBenchmark nullBenchmark;
 
     /**
      * Creates a new benchmark.
@@ -70,7 +75,14 @@ public class Benchmark<T> implements Runnable {
     }
 
     public DoubleStream getNanoTimes() {
-        return nanoTimes.stream().mapToDouble(s -> (double)s / (double)(multiplicity));
+        DoubleStream doubleStream;
+        if (nullBenchmark == null) {
+            doubleStream = nanoTimes.stream().mapToDouble(s -> (double)s / (double)(multiplicity));
+        } else {
+            double min = nullBenchmark.getNanoTimes().min().getAsDouble();
+            doubleStream = nanoTimes.stream().mapToDouble(s -> (double)(s-min) / (double)(multiplicity));
+        }
+        return doubleStream;
     }
     
     public OptionalDouble getMedian() {
