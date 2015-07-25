@@ -1,4 +1,4 @@
-package de.tynne.streamperformance;
+package de.tynne.benchmarksuite;
 
 import java.io.File;
 import java.io.IOException;

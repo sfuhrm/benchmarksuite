@@ -1,4 +1,4 @@
-package de.tynne.streamperformance;
+package de.tynne.benchmarksuite;
 
 import java.util.ArrayList;
 import java.util.Collection;
