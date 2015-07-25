@@ -30,6 +30,7 @@ public class Benchmark<T> implements Runnable {
     @Setter
     private String id;
     
+    /** Nano times as measured by {@link #run()}. */
     private final List<Long> nanoTimes;
     
     private final static IDGenerator GENERATOR = new IDGenerator();
@@ -44,7 +45,6 @@ public class Benchmark<T> implements Runnable {
      * @param init non-benchmarked initialization routing creating the object for the benchmark to use.
      * @param benchmark the benchmarked code using the result of the init routine.
      * @param name the benchmark name.
-     * @param times execute this often the benchmark code in one run.
      * @param multiplicity this is the number of elements the benchmark processes itself.
      */
     public Benchmark(Supplier<T> init, Consumer<T> benchmark, String name, long multiplicity) {
@@ -58,10 +58,13 @@ public class Benchmark<T> implements Runnable {
         log.debug("Created {} with multiplicity={}", name, multiplicity);
     }
     
+    /** Resets the remembered timing data. */
     public void reset() {
         nanoTimes.clear();
     }
     
+    /** Calculates one benchmark and measures the execution time.
+     */
     @Override
     public void run() {      
         T prep = init.get();
@@ -74,6 +77,9 @@ public class Benchmark<T> implements Runnable {
         nanoTimes.add(nanos);
     }
 
+    /** Gets the measured times for each {@link #run() } invocation.
+     * @return stream of times in nano seconds, divided by the multiplicity.
+     */
     public DoubleStream getNanoTimes() {
         DoubleStream doubleStream;
         if (nullBenchmark == null) {
@@ -85,6 +91,9 @@ public class Benchmark<T> implements Runnable {
         return doubleStream;
     }
     
+    /** Gets the median of the {@link #getNanoTimes() () times}.
+     * @return the optional median in nanos.
+     */
     public OptionalDouble getMedian() {
         return getNanoTimes().sorted().skip(nanoTimes.size()/2).findFirst();
     }

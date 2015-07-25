@@ -32,12 +32,12 @@ public class BenchmarkRunner implements Runnable {
         nullBenchmark = new NullBenchmark();
         
         this.benchmarks = new ArrayList<>(in);
-        checkIdUnique(benchmarks);
+        checkIdsUnique(benchmarks);
         this.warmupTimeNanos = warmupTimeNanos;
         this.runTimeNanos = runTimeNanos;
     }
     
-    private static void checkIdUnique(Collection<Benchmark> in) {
+    private static void checkIdsUnique(Collection<Benchmark> in) {
         List<String> idList = in.stream().map(b -> b.getId()).collect(Collectors.toList());
         Set<String> idSet = new HashSet<String>(idList);
         
