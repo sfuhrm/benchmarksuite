@@ -41,7 +41,7 @@ public class BenchmarkRunner implements Runnable {
     
     private static void checkIdsUnique(Collection<Benchmark> in) {
         List<String> idList = in.stream().map(b -> b.getId()).collect(Collectors.toList());
-        Set<String> idSet = new HashSet<String>(idList);
+        Set<String> idSet = new HashSet<>(idList);
         
         if (idList.size() != idSet.size()) {
             Map<String,Long> histo = idList.stream().collect(Collectors.groupingBy(b -> b, Collectors.counting()));
@@ -57,11 +57,10 @@ public class BenchmarkRunner implements Runnable {
         // all benchmarks plus null
         int total = benchmarks.size() + (RUN_NULL_BENCHMARK ? 1 : 0);
         
-        long totalTimeSecs = total * (warmupTimeNanos + runTimeNanos) / SEC_IN_NANOS;
         long totalStart = System.nanoTime();
         
         if (RUN_NULL_BENCHMARK) {
-            measureBenchmark(nullBenchmark, totalStart, progress, total, totalTimeSecs);
+            measureBenchmark(nullBenchmark, totalStart, progress, total);
             progress++;
         }
         
@@ -69,19 +68,19 @@ public class BenchmarkRunner implements Runnable {
             if (RUN_NULL_BENCHMARK) {
                 b.setNullBenchmark(nullBenchmark);
             }
-            measureBenchmark(b, totalStart, progress, total, totalTimeSecs);
+            measureBenchmark(b, totalStart, progress, total);
             progress++;
         }
         MDC.remove("benchmark");
     }
 
-    private void measureBenchmark(Benchmark b, long totalStart, int progress, int total, long totalTimeSecs) throws IllegalArgumentException {
+    private void measureBenchmark(Benchmark b, long totalStart, int progress, int total) throws IllegalArgumentException {
         MDC.put("benchmark", b.getId());
         log.debug("Benchmark {}: {}", b.getId(), b.getName());
         
         long elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
         printProgress(progress, total,
-                b, elapsed, totalTimeSecs, "WARUMP");
+                b, elapsed, "WARUMP");
         
         b.reset();
         long start = System.nanoTime();
@@ -94,7 +93,7 @@ public class BenchmarkRunner implements Runnable {
         
         elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
         printProgress(progress, total,
-                b, elapsed, totalTimeSecs, "MAIN RUN");
+                b, elapsed, "MAIN RUN");
         b.reset();
         start = System.nanoTime();
         while ((System.nanoTime() - start) < runTimeNanos  && b.getNanoTimes().count() < MEASURE_MAX) {
@@ -104,12 +103,13 @@ public class BenchmarkRunner implements Runnable {
         log.info("Run stats: {}", b);
     }
 
-    private void printProgress(int progress, int total, Benchmark b, long elapsed, long totalTimeSecs, String phase) {
+    private void printProgress(int progress, int total, Benchmark b, long elapsed, String phase) {
+        double done = (double)progress / (double)total;
         System.err.printf("%d / %d (%g%%) (%s, %s), %s (%ds elapsed, %ds to go)\n",
-                progress, total, (100.*progress)/total, b.getId(), b.getName(),
+                progress, total, (100.*done), b.getId(), b.getName(),
                 phase,
                 elapsed,
-                totalTimeSecs - elapsed
+                (int)((1.-done) * (elapsed/done))
         );
     }
 }
