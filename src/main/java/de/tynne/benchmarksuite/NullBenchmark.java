@@ -1,4 +1,4 @@
-package de.tynne.streamperformance;
+package de.tynne.benchmarksuite;
 
 /**
  * A benchmark doing nothing.
