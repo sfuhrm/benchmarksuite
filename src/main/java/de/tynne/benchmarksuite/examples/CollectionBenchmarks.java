@@ -40,7 +40,7 @@ public class CollectionBenchmarks implements BenchmarkProducer {
             return collection;
         };
         
-        return bench(id, "Add objs ", inData,  supplier, consumer);
+        return bench(id, "Remove "+inData.size()+" objs ", inData,  supplier, consumer);
     }
     
     private Benchmark add(String id, List<Long> inData, Supplier<Collection<Long>> supplier)  {
@@ -49,7 +49,7 @@ public class CollectionBenchmarks implements BenchmarkProducer {
                 l.add(val);
             }
         };
-        return bench(id, "Add objs ", inData,  supplier, consumer);
+        return bench(id, "Add "+inData.size()+" objs ", inData,  supplier, consumer);
     }
     
     private Benchmark bench(String id, String actionPart,List<Long> inData, Supplier<Collection<Long>> supplier, Consumer<Collection<Long>> consumer)  {
