@@ -2,6 +2,7 @@ package de.tynne.benchmarksuite.examples;
 
 import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,6 +38,7 @@ public abstract class AbstractCollectionBenchmarks implements BenchmarkProducer 
                 LinkedHashSet::new,
                 HashSet::new,
                 TreeSet::new,
+                ArrayDeque::new,
                 ArrayList::new,
                 LinkedList::new,
                 Vector::new
