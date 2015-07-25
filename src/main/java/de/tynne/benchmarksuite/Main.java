@@ -1,7 +1,7 @@
-package de.tynne.streamperformance;
+package de.tynne.benchmarksuite;
 
-import de.tynne.streamperformance.examples.CryptoBenchmarks;
-import de.tynne.streamperformance.examples.JDK8StreamBenchmarks;
+import de.tynne.benchmarksuite.examples.CryptoBenchmarks;
+import de.tynne.benchmarksuite.examples.JDK8StreamBenchmarks;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;

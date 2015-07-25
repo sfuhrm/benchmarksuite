@@ -1,7 +1,7 @@
-package de.tynne.streamperformance.examples;
+package de.tynne.benchmarksuite.examples;
 
-import de.tynne.streamperformance.Benchmark;
-import de.tynne.streamperformance.BenchmarkProducer;
+import de.tynne.benchmarksuite.Benchmark;
+import de.tynne.benchmarksuite.BenchmarkProducer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
