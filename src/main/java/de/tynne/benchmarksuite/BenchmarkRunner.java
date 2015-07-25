@@ -26,6 +26,8 @@ public class BenchmarkRunner implements Runnable {
     
     private final static boolean RUN_NULL_BENCHMARK = true;
     
+    public final static int MEASURE_MAX = 10_000;
+    
     public BenchmarkRunner(Collection<Benchmark> in, long warmupTimeNanos, long runTimeNanos) {
         log.debug("Init with {} benchmarks", in.size());
         
@@ -53,13 +55,14 @@ public class BenchmarkRunner implements Runnable {
     public void run() {
         int progress = 0;
         // all benchmarks plus null
-        int total = benchmarks.size() + 1;
+        int total = benchmarks.size() + (RUN_NULL_BENCHMARK ? 1 : 0);
         
         long totalTimeSecs = total * (warmupTimeNanos + runTimeNanos) / SEC_IN_NANOS;
         long totalStart = System.nanoTime();
         
         if (RUN_NULL_BENCHMARK) {
             measureBenchmark(nullBenchmark, totalStart, progress, total, totalTimeSecs);
+            progress++;
         }
         
         for (Benchmark b : benchmarks) {
@@ -67,6 +70,7 @@ public class BenchmarkRunner implements Runnable {
                 b.setNullBenchmark(nullBenchmark);
             }
             measureBenchmark(b, totalStart, progress, total, totalTimeSecs);
+            progress++;
         }
         MDC.remove("benchmark");
     }
@@ -81,7 +85,7 @@ public class BenchmarkRunner implements Runnable {
         
         b.reset();
         long start = System.nanoTime();
-        while ((System.nanoTime() - start) < warmupTimeNanos) {
+        while ((System.nanoTime() - start) < warmupTimeNanos && b.getNanoTimes().count() < MEASURE_MAX) {
             // warm up the jit
             b.run();
         }
@@ -93,13 +97,11 @@ public class BenchmarkRunner implements Runnable {
                 b, elapsed, totalTimeSecs, "MAIN RUN");
         b.reset();
         start = System.nanoTime();
-        while ((System.nanoTime() - start) < runTimeNanos) {
+        while ((System.nanoTime() - start) < runTimeNanos  && b.getNanoTimes().count() < MEASURE_MAX) {
             b.run();
         }
         
         log.info("Run stats: {}", b);
-        
-        progress++;
     }
 
     private void printProgress(int progress, int total, Benchmark b, long elapsed, long totalTimeSecs, String phase) {
