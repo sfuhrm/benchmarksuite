@@ -1,4 +1,4 @@
-package de.tynne.benchmarksuite.examples;
+package de.tynne.benchmarksuite.examples.collections;
 
 import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-@BenchmarkSuite(name = "CollectionsRemove")
-public class CollectionRemoveBenchmarks extends AbstractCollectionBenchmarks implements BenchmarkProducer {
+@BenchmarkSuite(name = "CollectionsIterate")
+public class CollectionIterate extends AbstractCollectionBenchmarks implements BenchmarkProducer {
 
-    public CollectionRemoveBenchmarks() {
+    public CollectionIterate() {
     }
     
     @Override
@@ -21,7 +21,6 @@ public class CollectionRemoveBenchmarks extends AbstractCollectionBenchmarks imp
             Iterator<Long> iter = l.iterator();
             while (iter.hasNext()) {
                 iter.next();
-                iter.remove();
             }
         };
         
@@ -31,7 +30,7 @@ public class CollectionRemoveBenchmarks extends AbstractCollectionBenchmarks imp
             return collection;
         };
         
-        return bench(id, "Remove "+inData.size()+" objs ", inData,  real, consumer);
+        return bench(id, "Iterate "+inData.size()+" objs ", inData,  real, consumer);
     }
 
 }

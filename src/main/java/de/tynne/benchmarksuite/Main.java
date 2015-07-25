@@ -91,7 +91,7 @@ public class Main {
             Chart chart = Chart.of(matching);
             
             Benchmark pred = null;
-            for (Benchmark b : chart.getPerformanceChart()) {
+            for (Benchmark b : matching) {
                 try {
                     DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
                     printer.print(matching.indexOf(b));

@@ -1,4 +1,4 @@
-package de.tynne.benchmarksuite.examples;
+package de.tynne.benchmarksuite.examples.collections;
 
 import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
