@@ -80,7 +80,7 @@ public class Main {
         BackupHelper.backupIfNeeded(args.getOutput());
         
         // this looks like NOT comma seperated values, but excel and libreoffice load this automatically
-        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Std Dev [ns]", "Chart Pos", "Rel Increase [%]", "Best Increase [%]");
+        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Std Dev [ns]", "Chart Pos", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             List<Benchmark> matching = benchmarks.stream().filter(b -> args.getExecute().matcher(b.getId()).matches()).collect(Collectors.toList());
@@ -90,7 +90,6 @@ public class Main {
             benchmarkRunner.run();
             Chart chart = Chart.of(matching);
             
-            Benchmark pred = null;
             for (Benchmark b : matching) {
                 try {
                     DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
@@ -105,12 +104,9 @@ public class Main {
                     printer.print(chart.getChart().get(b).chartPosition);
                     double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
                     double thisAvg = doubleSummaryStatistics.getAverage();
-                    double predAvg = pred != null ? chart.getStats().get(pred).getAverage() : thisAvg;
 
-                    printer.print(100. * (thisAvg - predAvg) / predAvg);
                     printer.print(100. * (thisAvg - bestAvg) / bestAvg);
                     printer.println();
-                    pred = b;
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
