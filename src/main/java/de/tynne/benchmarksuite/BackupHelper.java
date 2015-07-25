@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author fury
  */
 @Slf4j
-public class BackupHelper {
+class BackupHelper {
     
     private final static String BAK_SUFFIX = ".bak-";
     

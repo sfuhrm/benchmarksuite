@@ -5,7 +5,7 @@ package de.tynne.benchmarksuite;
  * Used to calibrate the measuring.
  * @author fury
  */
-public class NullBenchmark extends Benchmark<Void> {
+class NullBenchmark extends Benchmark<Void> {
 
     public NullBenchmark() {
         super(() -> null, v -> {}, "Null Benchmark", 1);
