@@ -25,7 +25,9 @@ public abstract class AbstractCollectionBenchmarks implements BenchmarkProducer 
     }
         
     protected Benchmark bench(String id, String actionPart,List<Long> inData, Supplier<Collection<Long>> supplier, Consumer<Collection<Long>> consumer)  {
-        Benchmark b = new Benchmark<>(supplier, consumer, actionPart+supplier.get().getClass().getName(), inData.size());
+        Benchmark b = new Benchmark<>(supplier, consumer, 
+                actionPart+
+                (supplier.get().getClass().getName().replace("java.util.", "")), inData.size());
         b.setId(id);
         return b;
     }
