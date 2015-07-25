@@ -5,6 +5,7 @@ import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import lombok.Getter;
 
 /**
@@ -32,6 +33,8 @@ public class Chart {
     @Getter
     private List<Benchmark> performanceChart;
     
+    private final static Function<DoubleSummaryStatistics, Double> SORTING_CRITERIUM = DoubleSummaryStatistics::getMin;
+    
     private Chart() {
     }
     
@@ -44,7 +47,7 @@ public class Chart {
         });
         
         result.performanceChart = new ArrayList<>(benchmarks);
-        result.performanceChart.sort((a,b) -> Double.compare(result.stats.get(a).getAverage(), result.stats.get(b).getAverage()));
+        result.performanceChart.sort((a,b) -> Double.compare(SORTING_CRITERIUM.apply(result.stats.get(a)), SORTING_CRITERIUM.apply(result.stats.get(b))));
 
         for (int i=0; i < result.performanceChart.size(); i++) {
             Benchmark b = result.performanceChart.get(i);
