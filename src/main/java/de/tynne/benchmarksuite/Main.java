@@ -45,12 +45,13 @@ public class Main {
     }
     
     private static void listSuites(Map<BenchmarkSuite, BenchmarkProducer> suites, PrintStream ps) {
-        suites.entrySet().stream().forEach((e) -> {
-            ps.printf("%s: %s\n", 
-                    nameFor(e.getKey(), e.getValue()), 
+        suites.entrySet().stream().sorted((a, b) -> nameFor(a.getKey(), a.getValue()).compareToIgnoreCase(nameFor(b.getKey(), b.getValue()))).
+                forEach((e) -> {
+                    ps.printf("%s: %s\n",
+                            nameFor(e.getKey(), e.getValue()),
                             e.getKey().enabled());
-        }
-        );
+                }
+                );
         ps.flush();
     }
     
