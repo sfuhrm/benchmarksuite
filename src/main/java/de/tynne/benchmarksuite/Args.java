@@ -2,6 +2,7 @@ package de.tynne.benchmarksuite;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +45,8 @@ public class Args {
     private boolean listSuites;
     
     @Getter
-    @Option(name = "-suite", aliases = {"-s"}, usage = "The benchmark suite to execute benchmarks of.")
-    private String suite;
+    @Option(name = "-suite", aliases = {"-s"}, usage = "The benchmark suite(s) to execute benchmarks of.")
+    private List<String> suites;
     
     @Getter
     @Option(name = "-list-benchmarks", aliases = {"-l"}, usage = "Show the available benchmarks and then exit")
@@ -73,7 +74,7 @@ public class Args {
             
             result.logProperties();
             
-            if (result.suite == null && ! result.listSuites) {
+            if ((result.suites == null || result.suites.isEmpty()) && ! result.listSuites) {
                 System.err.println("Need a suite specified.");
                 showHelp = true;
             }

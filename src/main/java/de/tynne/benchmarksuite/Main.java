@@ -115,8 +115,28 @@ public class Main {
         }
     }
     
+    /** Returns a single suite for benchmarks by name.
+     */
     private static Optional<BenchmarkProducer> findByName(String suite, Map<BenchmarkSuite, BenchmarkProducer> suites) {
         return suites.entrySet().stream().filter(e -> nameFor(e.getKey(), e.getValue()).equalsIgnoreCase(suite)).map(e -> e.getValue()).findFirst();
+    }
+    
+    /** Returns a producer for all benchmarks in the named suites.
+     */
+    private static BenchmarkProducer findAllByName(List<String> suiteNames, Map<BenchmarkSuite, BenchmarkProducer> suites) {
+        List<BenchmarkProducer> benchmarkProducers = suiteNames.stream().
+                map(s -> findByName(s, suites)).
+                filter(bp -> bp.isPresent()).
+                map(o -> o.get()).
+                collect(Collectors.toList());
+
+        return () -> {
+            List<Benchmark> result = new ArrayList<>();
+            benchmarkProducers.forEach(bp -> {
+                result.addAll(bp.get());
+            });
+            return result;
+        };
     }
     
     private static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites() throws InstantiationException, IllegalAccessException {
@@ -146,7 +166,7 @@ public class Main {
         }
         
         
-        BenchmarkProducer benchmarkProducer = findByName(args.getSuite(), suites).get();
+        BenchmarkProducer benchmarkProducer = findAllByName(args.getSuites(), suites);
         
         if (args.isListBenchmarks()) {
             listBenchmarks(benchmarkProducer, System.out);
