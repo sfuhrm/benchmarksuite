@@ -21,6 +21,6 @@ public class CollectionAddBenchmarks extends AbstractCollectionBenchmarks implem
                 l.add(val);
             }
         };
-        return bench(id, "Add "+inData.size()+" objs ", inData,  supplier, consumer);
+        return bench("A"+id, "Add "+inData.size()+" objs ", inData,  supplier, consumer);
     }
 }

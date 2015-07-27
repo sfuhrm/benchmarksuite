@@ -31,7 +31,7 @@ public class CollectionRemoveBenchmarks extends AbstractCollectionBenchmarks imp
             return collection;
         };
         
-        return bench(id, "Remove "+inData.size()+" objs ", inData,  real, consumer);
+        return bench("R"+id, "Remove "+inData.size()+" objs ", inData,  real, consumer);
     }
 
 }

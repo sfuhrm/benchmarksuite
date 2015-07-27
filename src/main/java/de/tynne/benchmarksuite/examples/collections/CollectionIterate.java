@@ -30,7 +30,7 @@ public class CollectionIterate extends AbstractCollectionBenchmarks implements B
             return collection;
         };
         
-        return bench(id, "Iterate "+inData.size()+" objs ", inData,  real, consumer);
+        return bench("I"+id, "Iterate "+inData.size()+" objs ", inData,  real, consumer);
     }
 
 }
