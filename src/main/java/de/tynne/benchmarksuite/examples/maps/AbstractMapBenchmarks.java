@@ -4,7 +4,6 @@ import de.tynne.benchmarksuite.Benchmark;
 import de.tynne.benchmarksuite.BenchmarkProducer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
