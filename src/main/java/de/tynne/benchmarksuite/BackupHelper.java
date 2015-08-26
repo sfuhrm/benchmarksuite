@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Some logic for backing up existing files.
- * @author fury
+ * @author Stephan Fuhrmann
  */
 @Slf4j
 class BackupHelper {

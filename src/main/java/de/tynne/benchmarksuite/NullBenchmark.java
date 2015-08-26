@@ -3,7 +3,7 @@ package de.tynne.benchmarksuite;
 /**
  * A benchmark doing nothing.
  * Used to calibrate the measuring.
- * @author fury
+ * @author Stephan Fuhrmann
  */
 class NullBenchmark extends Benchmark<Void> {
 

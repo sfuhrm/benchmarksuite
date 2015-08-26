@@ -21,7 +21,7 @@ import org.reflections.Reflections;
 
 /**
  *
- * @author fury
+ * @author Stephan Fuhrmann
  */
 public class Main {
 

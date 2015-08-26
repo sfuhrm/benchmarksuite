@@ -11,7 +11,7 @@ import lombok.Getter;
 /**
  * A comparison chart for multiple benchmarks.
  * @see #of(java.util.List) 
- * @author fury
+ * @author Stephan Fuhrmann
  */
 public class Chart {
     

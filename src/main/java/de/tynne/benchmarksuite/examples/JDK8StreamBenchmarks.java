@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author fury
+ * @author Stephan Fuhrmann
  */
 @BenchmarkSuite(name = "JDK8Streams")
 public class JDK8StreamBenchmarks implements BenchmarkProducer {

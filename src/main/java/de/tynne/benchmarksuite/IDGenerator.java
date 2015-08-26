@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Generates unique IDs for benchmarks.
- * @author fury
+ * @author Stephan Fuhrmann
  */
 class IDGenerator {
     

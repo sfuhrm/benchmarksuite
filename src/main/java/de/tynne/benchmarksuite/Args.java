@@ -12,7 +12,7 @@ import org.kohsuke.args4j.Option;
 
 /**
  * Command line arguments for running the benchmarks.
- * @author fury
+ * @author Stephan Fuhrmann
  */
 @Slf4j
 public class Args {
