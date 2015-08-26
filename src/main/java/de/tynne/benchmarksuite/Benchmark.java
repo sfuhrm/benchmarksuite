@@ -10,6 +10,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ *  A benchmark.
+ * A benchmark has two parts: 
+ * <ol>
+ * <li> An initialization part that is not measured.
+ * <li> The benchmark itself that is measured and uses the initialization part from above.
+ * </ol>
+ * @author Stephan Fuhrmann
+ * @param <T> The type of the initialization result.
+ */
 @Slf4j
 public class Benchmark<T> implements Runnable {
     /** Produces data for {@link #benchmark}. */

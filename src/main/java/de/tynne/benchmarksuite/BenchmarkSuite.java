@@ -10,6 +10,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation for {@link BenchmarkProducer} 
+ * classes that shall be automatically found and
+ * instantiated by the
+ * software.
+ * @author Stephan Fuhrmann
+ */
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target(value=ElementType.TYPE)
 public @interface BenchmarkSuite {

@@ -11,6 +11,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
+/**
+ * Executes a collection of benchmarks.
+ * @author Stephan Fuhrmann
+ */
 @Slf4j
 public class BenchmarkRunner implements Runnable {    
     @Getter
