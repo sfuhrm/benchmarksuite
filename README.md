@@ -19,7 +19,28 @@ Usage is thru the command line.
 
 The following options are available:
 
-...
+```
+ -charset (-c) VAL              : Output CSV file charset to use. (default:
+                                  ISO-8859-15)
+ -checkNano (-C)                : Check nano timing of JDK (default: false)
+ -execute (-e) REGEX            : Regex defining which benchmark IDs to
+                                  execute. (default: .*)
+ -help (-h)                     : Show this command line help. (default: false)
+ -list-benchmarks (-l)          : Show the available benchmarks and then exit
+                                  (default: false)
+ -list-suites (-L)              : Show the available benchmark suites and then
+                                  exit (default: false)
+ -output (-out, -o) FILE        : Output CSV file to write to. (default:
+                                  out.csv)
+ -runTime (-r, -run) SECS       : Run up time in seconds for each benchmark.
+                                  The performance within this IS benchmarked.
+                                  (default: 30)
+ -suite (-s) VAL                : The benchmark suite(s) to execute benchmarks
+                                  of.
+ -warmUpTime (-w, -warmup) SECS : Warm up time in seconds for each benchmark.
+                                  The performance within this is NOT
+                                  benchmarked. (default: 5)
+```
 
 
 ## License
