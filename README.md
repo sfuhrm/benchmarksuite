@@ -13,6 +13,13 @@ Each benchmark run is split into a warmup phase and a run phase.
 The warmup phase is to fill the cache lines and/or to give the JIT compiler
 of the JDK a little time to compile and optimize the code.
 
+### Suite versus benchmark
+
+A suite is a set of benchmarks that somehow belong to each other.
+An example would be a benchmark for reading files with 1k, 4k, 8k and 16k.
+Each size would be tested by a benchmark, and all benchmarks
+together are a suite.
+
 ## Usage
 
 Usage is thru the command line. 
