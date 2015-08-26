@@ -42,6 +42,11 @@ The following options are available:
                                   benchmarked. (default: 5)
 ```
 
+## Example
+
+A simple Excel-graphed example can be found in the following graph:
+
+![Benchmark example](http://tynne.de/wp-content/uploads/2015/07/cetus-10.png)
 
 ## License
 
