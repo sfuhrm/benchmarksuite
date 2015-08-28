@@ -95,6 +95,7 @@ public class Main {
     
     private static String format(Args args, double number) throws IOException {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+        nf.setGroupingUsed(false);
         String string = nf.format(number);
         return string.replaceAll("\\.", args.getDecimalDot());
     }
@@ -103,7 +104,7 @@ public class Main {
         BackupHelper.backupIfNeeded(args.getOutput());
                 
         // this looks like NOT comma seperated values, but excel and libreoffice load this automatically
-        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
+        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]", "Iterations");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             List<Benchmark> matching = benchmarks.stream().filter(b -> args.getExecute().matcher(b.getId()).matches()).collect(Collectors.toList());
@@ -123,6 +124,7 @@ public class Main {
                     printer.print(format(args, statRecord.getAverage()));
                     printer.print(format(args, statRecord.getMax()));
                     printer.print(chart.getChart().get(b).chartPosition);
+                    printer.print(statRecord.getCount());
                     double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
                     double thisAvg = statRecord.getAverage();
 
