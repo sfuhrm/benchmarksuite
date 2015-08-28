@@ -94,7 +94,7 @@ public class Main {
     }
     
     private static String format(Args args, double number) throws IOException {
-        NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
         String string = nf.format(number);
         return string.replaceAll("\\.", args.getDecimalDot());
     }
