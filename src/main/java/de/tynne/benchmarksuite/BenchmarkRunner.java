@@ -44,9 +44,7 @@ public class BenchmarkRunner implements Runnable {
     private final NullBenchmark nullBenchmark;
     
     private final static boolean RUN_NULL_BENCHMARK = true;
-    
-    public final static int MEASURE_MAX = 10_000;
-    
+        
     public BenchmarkRunner(Collection<Benchmark> in, long warmupTimeNanos, long runTimeNanos) {
         log.debug("Init with {} benchmarks", in.size());
         
@@ -103,7 +101,7 @@ public class BenchmarkRunner implements Runnable {
         
         b.reset();
         long start = System.nanoTime();
-        while ((System.nanoTime() - start) < warmupTimeNanos && b.getNanoTimes().count() < MEASURE_MAX) {
+        while ((System.nanoTime() - start) < warmupTimeNanos) {
             // warm up the jit
             b.run();
         }
@@ -115,7 +113,7 @@ public class BenchmarkRunner implements Runnable {
                 b, elapsed, "MAIN RUN");
         b.reset();
         start = System.nanoTime();
-        while ((System.nanoTime() - start) < runTimeNanos  && b.getNanoTimes().count() < MEASURE_MAX) {
+        while ((System.nanoTime() - start) < runTimeNanos) {
             b.run();
         }
         

@@ -20,10 +20,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.Optional;
@@ -91,12 +92,18 @@ public class Main {
         
         ps.printf("min=%d, avg=%g, max=%d\n", statistics.getMin(), statistics.getAverage(), statistics.getMax());
     }
+    
+    private static String format(Args args, double number) throws IOException {
+        NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+        String string = nf.format(number);
+        return string.replaceAll("\\.", args.getDecimalDot());
+    }
 
     private static void runBenchmarks(Args args, BenchmarkProducer benchmarkProducer) throws IOException {
         BackupHelper.backupIfNeeded(args.getOutput());
-        
+                
         // this looks like NOT comma seperated values, but excel and libreoffice load this automatically
-        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Median [ns]", "Max [ns]", "Std Dev [ns]", "Chart Pos", "Best Increase [%]");
+        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]");
         try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             List<Benchmark> matching = benchmarks.stream().filter(b -> args.getExecute().matcher(b.getId()).matches()).collect(Collectors.toList());
@@ -108,20 +115,18 @@ public class Main {
             
             for (Benchmark b : matching) {
                 try {
-                    DoubleSummaryStatistics doubleSummaryStatistics = chart.getStats().get(b);
+                    StatRecord statRecord = chart.getStats().get(b);
                     printer.print(matching.indexOf(b));
                     printer.print(b.getId());
                     printer.print(b.getName());
-                    printer.print(doubleSummaryStatistics.getMin());
-                    printer.print(doubleSummaryStatistics.getAverage());
-                    printer.print(b.getMedian().getAsDouble());
-                    printer.print(doubleSummaryStatistics.getMax());
-                    printer.print(standardDeviationOf(b.getNanoTimes(), doubleSummaryStatistics.getAverage()));
+                    printer.print(format(args, statRecord.getMin()));
+                    printer.print(format(args, statRecord.getAverage()));
+                    printer.print(format(args, statRecord.getMax()));
                     printer.print(chart.getChart().get(b).chartPosition);
                     double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
-                    double thisAvg = doubleSummaryStatistics.getAverage();
+                    double thisAvg = statRecord.getAverage();
 
-                    printer.print(100. * (thisAvg - bestAvg) / bestAvg);
+                    printer.print(format(args, 100. * (thisAvg - bestAvg) / bestAvg));
                     printer.println();
                 } catch (IOException ex) {
                     ex.printStackTrace();

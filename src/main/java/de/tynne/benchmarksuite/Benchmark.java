@@ -15,12 +15,8 @@
  */
 package de.tynne.benchmarksuite;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.OptionalDouble;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.DoubleStream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +51,8 @@ public class Benchmark<T> implements Runnable {
     @Setter
     private String id;
     
-    /** Nano times as measured by {@link #run()}. */
-    private final List<Long> nanoTimes;
+    /** Nano time stats as measured by {@link #run()}. */
+    private final StatRecord statRecord;
     
     private final static IDGenerator GENERATOR = new IDGenerator();
     
@@ -78,14 +74,20 @@ public class Benchmark<T> implements Runnable {
         this.benchmark = benchmark;
         this.name = name;
         this.multiplicity = multiplicity;
-        this.nanoTimes = new ArrayList<>();
+        this.statRecord = new StatRecord();
         
         log.debug("Created {} with multiplicity={}", name, multiplicity);
     }
     
+    /** Returns a scaled instance of the stats with the preset multiplicity.
+     */
+    public StatRecord getStatRecord() {
+        return statRecord.scaleTo(1. / multiplicity);
+    }
+
     /** Resets the remembered timing data. */
     public void reset() {
-        nanoTimes.clear();
+        statRecord.reset();
     }
     
     /** Calculates one benchmark and measures the execution time.
@@ -99,37 +101,16 @@ public class Benchmark<T> implements Runnable {
 
         long nanos = endNanos - startNanos;
         
-        nanoTimes.add(nanos);
-    }
-
-    /** Gets the measured times for each {@link #run() } invocation.
-     * @return stream of times in nano seconds, divided by the multiplicity.
-     */
-    public DoubleStream getNanoTimes() {
-        DoubleStream doubleStream;
-        if (nullBenchmark == null) {
-            doubleStream = nanoTimes.stream().mapToDouble(s -> (double)s / (double)(multiplicity));
-        } else {
-            double min = nullBenchmark.getNanoTimes().min().getAsDouble();
-            doubleStream = nanoTimes.stream().mapToDouble(s -> (double)(s-min) / (double)(multiplicity));
-        }
-        return doubleStream;
+        statRecord.put(nanos);
     }
     
-    /** Gets the median of the {@link #getNanoTimes() () times}.
-     * @return the optional median in nanos.
-     */
-    public OptionalDouble getMedian() {
-        return getNanoTimes().sorted().skip(nanoTimes.size()/2).findFirst();
-    }
-
     @Override
     public String toString() {
         return getName()+" "+
-                "count="+nanoTimes.size()+", "+
-                "min="+getNanoTimes().min()+", "+
-                "avg="+getNanoTimes().average()+", "+
-                "max="+getNanoTimes().max()
+                "count="+statRecord.getCount()+", "+
+                "min="+statRecord.getMin()+", "+
+                "avg="+statRecord.getAverage()+", "+
+                "max="+statRecord.getMax()
         ;
     }
 }

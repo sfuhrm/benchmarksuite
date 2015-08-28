@@ -72,6 +72,10 @@ public class Args {
     private boolean checkNano;
     
     @Getter
+    @Option(name = "-decimal-dot", aliases = {"-d"}, usage = "The decimal dot sign to use")
+    private String decimalDot = ".";
+    
+    @Getter
     @Option(name = "-help", aliases = {"-h"}, usage = "Show this command line help.", help = true)
     private boolean help;
         

@@ -40,7 +40,7 @@ public class Chart {
     }
     
     @Getter
-    private final Map<Benchmark, DoubleSummaryStatistics> stats = new HashMap<>();
+    private final Map<Benchmark, StatRecord> stats = new HashMap<>();
     
     @Getter
     private final Map<Benchmark, ChartEntry> chart = new HashMap<>();    
@@ -48,7 +48,7 @@ public class Chart {
     @Getter
     private List<Benchmark> performanceChart;
     
-    private final static Function<DoubleSummaryStatistics, Double> SORTING_CRITERIUM = DoubleSummaryStatistics::getMin;
+    private final static Function<StatRecord, Number> SORTING_CRITERIUM = StatRecord::getMin;
     
     private Chart() {
     }
@@ -57,12 +57,12 @@ public class Chart {
         Chart result = new Chart();
         
         benchmarks.stream().forEach((b) -> {
-            DoubleSummaryStatistics doubleSummaryStatistics = b.getNanoTimes().summaryStatistics();
-            result.stats.put(b, doubleSummaryStatistics);
+            StatRecord statRecord = b.getStatRecord();
+            result.stats.put(b, statRecord);
         });
         
         result.performanceChart = new ArrayList<>(benchmarks);
-        result.performanceChart.sort((a,b) -> Double.compare(SORTING_CRITERIUM.apply(result.stats.get(a)), SORTING_CRITERIUM.apply(result.stats.get(b))));
+        result.performanceChart.sort((a,b) -> Double.compare(SORTING_CRITERIUM.apply(result.stats.get(a)).doubleValue(), SORTING_CRITERIUM.apply(result.stats.get(b)).doubleValue()));
 
         for (int i=0; i < result.performanceChart.size(); i++) {
             Benchmark b = result.performanceChart.get(i);
