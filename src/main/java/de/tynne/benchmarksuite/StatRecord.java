@@ -42,6 +42,7 @@ public class StatRecord {
         record.min = min * scale;
         record.max = max * scale;
         record.sum = sum * scale;
+        record.count = count;
         return record;
     }
 
