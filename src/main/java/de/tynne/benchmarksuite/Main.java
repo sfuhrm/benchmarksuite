@@ -124,11 +124,11 @@ public class Main {
                     printer.print(format(args, statRecord.getAverage()));
                     printer.print(format(args, statRecord.getMax()));
                     printer.print(chart.getChart().get(b).chartPosition);
-                    printer.print(statRecord.getCount());
                     double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
                     double thisAvg = statRecord.getAverage();
 
                     printer.print(format(args, 100. * (thisAvg - bestAvg) / bestAvg));
+                    printer.print(statRecord.getCount());
                     printer.println();
                 } catch (IOException ex) {
                     ex.printStackTrace();
