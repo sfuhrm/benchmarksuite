@@ -65,12 +65,4 @@ public class StatRecord {
     public double getAverage() {
         return (double)sum / (double)count;
     }
-
-    /** Resets the record as if it never received data. */
-    public void reset() {
-        min = 0;
-        max = 0;
-        sum = 0;
-        count = 0;
-    }
 }

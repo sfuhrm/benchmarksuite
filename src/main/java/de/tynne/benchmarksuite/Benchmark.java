@@ -52,7 +52,7 @@ public class Benchmark<T> implements Runnable {
     private String id;
     
     /** Nano time stats as measured by {@link #run()}. */
-    private final StatRecord statRecord;
+    private StatRecord statRecord;
     
     private final static IDGenerator GENERATOR = new IDGenerator();
     
@@ -87,7 +87,7 @@ public class Benchmark<T> implements Runnable {
 
     /** Resets the remembered timing data. */
     public void reset() {
-        statRecord.reset();
+        statRecord = new StatRecord();
     }
     
     /** Calculates one benchmark and measures the execution time.
