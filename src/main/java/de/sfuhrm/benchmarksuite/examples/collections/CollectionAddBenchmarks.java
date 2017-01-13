@@ -13,40 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.tynne.benchmarksuite.examples.collections;
+package de.sfuhrm.benchmarksuite.examples.collections;
 
-import de.tynne.benchmarksuite.Benchmark;
-import de.tynne.benchmarksuite.BenchmarkProducer;
-import de.tynne.benchmarksuite.BenchmarkSuite;
+import de.sfuhrm.benchmarksuite.Benchmark;
+import de.sfuhrm.benchmarksuite.BenchmarkProducer;
+import de.sfuhrm.benchmarksuite.BenchmarkSuite;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-@BenchmarkSuite(name = "CollectionsRemove")
-public class CollectionRemoveBenchmarks extends AbstractCollectionBenchmarks implements BenchmarkProducer {
+@BenchmarkSuite(name = "CollectionsAdd")
+public class CollectionAddBenchmarks extends AbstractCollectionBenchmarks implements BenchmarkProducer {
 
-    public CollectionRemoveBenchmarks() {
+    public CollectionAddBenchmarks() {
     }
     
     @Override
     protected Benchmark operation(String id, List<Long> inData, Supplier<Collection<Long>> supplier) {
         Consumer<Collection<Long>> consumer = l -> {
-            Iterator<Long> iter = l.iterator();
-            while (iter.hasNext()) {
-                iter.next();
-                iter.remove();
+            for (Long val : inData) {
+                l.add(val);
             }
         };
-        
-        Supplier<Collection<Long>> real = () -> {
-            Collection<Long> collection = supplier.get();
-            collection.addAll(inData);
-            return collection;
-        };
-        
-        return bench("R"+id, "Remove "+inData.size()+" objs ", inData,  real, consumer);
+        return bench("A"+id, "Add "+inData.size()+" objs ", inData,  supplier, consumer);
     }
-
 }

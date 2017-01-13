@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.tynne.benchmarksuite;
+package de.sfuhrm.benchmarksuite;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.tynne.benchmarksuite;
+package de.sfuhrm.benchmarksuite;
 
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicInteger;
 
-/** The signature of a benchmark factory class.
- * @see BenchmarkSuite
+/**
+ * Generates unique IDs for benchmarks.
  * @author Stephan Fuhrmann
  */
-public interface BenchmarkProducer extends Supplier<List<Benchmark>> {
+class IDGenerator {
+    
+    private final AtomicInteger atomicInteger = new AtomicInteger();
+    
+    public Integer generate() {
+        return atomicInteger.addAndGet(1);
+    }
+    
 }

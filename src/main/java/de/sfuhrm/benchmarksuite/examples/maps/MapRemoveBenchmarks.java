@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.tynne.benchmarksuite.examples.maps;
+package de.sfuhrm.benchmarksuite.examples.maps;
 
-import de.tynne.benchmarksuite.Benchmark;
-import de.tynne.benchmarksuite.BenchmarkProducer;
-import de.tynne.benchmarksuite.BenchmarkSuite;
+import de.sfuhrm.benchmarksuite.Benchmark;
+import de.sfuhrm.benchmarksuite.BenchmarkProducer;
+import de.sfuhrm.benchmarksuite.BenchmarkSuite;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Consumer;
