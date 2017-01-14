@@ -52,7 +52,13 @@ public class BenchmarkRunner implements Runnable {
         
         this.benchmarks = new ArrayList<>(in);
         checkIdsUnique(benchmarks);
+        if (warmupTimeNanos <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.warmupTimeNanos = warmupTimeNanos;
+        if (runTimeNanos <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.runTimeNanos = runTimeNanos;
     }
     
