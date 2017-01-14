@@ -161,8 +161,8 @@ public class Main {
         };
     }
     
-    private static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites() throws InstantiationException, IllegalAccessException {
-        Reflections reflections = new Reflections("de.sfuhrm.benchmarksuite");
+    private static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites(String packagePrefix) throws InstantiationException, IllegalAccessException {
+        Reflections reflections = new Reflections(packagePrefix);
 
         Set<Class<?>> benchmarkSuites = reflections.getTypesAnnotatedWith(BenchmarkSuite.class);
         
@@ -181,7 +181,7 @@ public class Main {
             return;
         }
         
-        Map<BenchmarkSuite, BenchmarkProducer> suites = getBenchmarkSuites();
+        Map<BenchmarkSuite, BenchmarkProducer> suites = getBenchmarkSuites(args.getSuiteSearchPackagePrefix());
         if (args.isListSuites()) {
             listSuites(suites, System.out);
             return;
