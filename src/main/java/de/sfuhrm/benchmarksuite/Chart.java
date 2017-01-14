@@ -16,7 +16,6 @@
 package de.sfuhrm.benchmarksuite;
 
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

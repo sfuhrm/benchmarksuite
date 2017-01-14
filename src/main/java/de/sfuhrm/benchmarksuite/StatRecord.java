@@ -15,12 +15,14 @@
  */
 package de.sfuhrm.benchmarksuite;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
  * Statistic moments of measured data.
  * @author Stephan Fuhrmann
  */
+@EqualsAndHashCode(of = {"min", "max", "sum", "count"})
 public class StatRecord {
 
     @Getter
