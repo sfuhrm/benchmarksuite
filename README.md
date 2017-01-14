@@ -1,4 +1,4 @@
-# Benchmark Suite
+# Benchmark Suite ![Travis CI Status](https://travis-ci.org/sfuhrm/benchmarksuite.svg?branch=master)
 
 ## What is it?
 
