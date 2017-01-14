@@ -64,6 +64,9 @@ public class StatRecord {
 
     /** Returns the average of the seen values. */
     public double getAverage() {
+        if (count == 0) {
+            return 0;
+        }
         return (double)sum / (double)count;
     }
 }

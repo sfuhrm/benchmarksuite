@@ -30,7 +30,11 @@ public class BenchmarkTest {
         assertThat(b.getName(), is("foo"));
         assertThat(b.getMultiplicity(), is(1l));
         assertThat(b.getNullBenchmark(), nullValue());
+        assertThat(b.getStatRecord(), notNullValue());
         assertThat(b.getStatRecord().getCount(), is(0));
+        assertThat(b.getStatRecord().getMin(), is(0.));
+        assertThat(b.getStatRecord().getMax(), is(0.));
+        assertThat(b.getStatRecord().getAverage(), is(0.));
     }
             
     @Test
@@ -46,5 +50,23 @@ public class BenchmarkTest {
         assertThat(b.getStatRecord(), notNullValue());
         verify(consumer).accept(1);
         assertThat(b.getStatRecord().getCount(), is(1));
+    }
+    
+    @Test
+    public void testReset() {
+        Consumer<Integer> consumer =  mock(Consumer.class);
+        Benchmark b = new Benchmark(() -> 1, consumer, "foo", 1);
+        b.run();
+        b.reset();
+        
+        assertNotNull(b.getId());
+        assertThat(b.getName(), is("foo"));
+        assertThat(b.getMultiplicity(), is(1l));
+        assertThat(b.getNullBenchmark(), nullValue());
+        assertThat(b.getStatRecord(), notNullValue());
+        assertThat(b.getStatRecord().getCount(), is(0));
+        assertThat(b.getStatRecord().getMin(), is(0.));
+        assertThat(b.getStatRecord().getMax(), is(0.));
+        assertThat(b.getStatRecord().getAverage(), is(0.));
     }
 }
