@@ -76,6 +76,10 @@ public class Args {
     private String decimalDot = ".";
     
     @Getter
+    @Option(name = "-package-root", aliases = {"-R"}, usage = "The root package to search benchmark suites in.")
+    private String suiteSearchPackagePrefix = "de.sfuhrm.benchmarksuite";
+    
+    @Getter
     @Option(name = "-help", aliases = {"-h"}, usage = "Show this command line help.", help = true)
     private boolean help;
         
