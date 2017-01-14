@@ -25,8 +25,8 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class MainTest {
     @Test
-    public void testBenchmarkSuitesEmpty() throws InstantiationException, IllegalAccessException {
-        Map<BenchmarkSuite, BenchmarkProducer> map = Main.getBenchmarkSuites("");
+    public void testListBenchmarkSuitesNotEmpty() throws InstantiationException, IllegalAccessException {
+        Map<BenchmarkSuite, BenchmarkProducer> map = Main.listBenchmarkSuites("");
         assertThat(map.size(), not(is(0)));
     }    
 }

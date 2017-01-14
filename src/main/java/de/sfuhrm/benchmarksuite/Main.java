@@ -170,7 +170,7 @@ public class Main {
     
     /** Lists all available benchmark suites within the package subhierarchy relative to the package prefix. 
      */
-    static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites(String packagePrefix) throws InstantiationException, IllegalAccessException {
+    static Map<BenchmarkSuite, BenchmarkProducer> listBenchmarkSuites(String packagePrefix) throws InstantiationException, IllegalAccessException {
         Reflections reflections = new Reflections(packagePrefix);
 
         Set<Class<?>> benchmarkSuites = reflections.getTypesAnnotatedWith(BenchmarkSuite.class);
@@ -190,7 +190,7 @@ public class Main {
             return;
         }
         
-        Map<BenchmarkSuite, BenchmarkProducer> suites = getBenchmarkSuites(args.getSuiteSearchPackagePrefix());
+        Map<BenchmarkSuite, BenchmarkProducer> suites = listBenchmarkSuites(args.getSuiteSearchPackagePrefix());
         if (args.isListSuites()) {
             listSuites(suites, System.out);
             return;
