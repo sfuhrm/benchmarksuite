@@ -71,6 +71,10 @@ public class Main {
         ps.flush();
     }
     
+    /** Measures the time between two measurement calls. 
+     * @param times the number of tests to run.
+     * @param addTo the list to add the time delta in nanos.
+     */
     private static void nanoNullLoop(int times, List<Long> addTo) {
         for (int i = 0; i < times; i++) {
             long start = System.nanoTime();
@@ -81,6 +85,7 @@ public class Main {
         }
     }
     
+    /** Checks the nano timing of the JDK using {@link #nanoNullLoop(int, java.util.List)}. */
     private static void checkNano(PrintStream ps) {
         List<Long> diffs = new ArrayList<>();
 
@@ -93,6 +98,7 @@ public class Main {
         ps.printf("min=%d, avg=%g, max=%d\n", statistics.getMin(), statistics.getAverage(), statistics.getMax());
     }
     
+    /** Formats a number using the {@link Args#decimalDot}. */
     private static String format(Args args, double number) throws IOException {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
         nf.setGroupingUsed(false);
@@ -100,6 +106,7 @@ public class Main {
         return string.replaceAll("\\.", args.getDecimalDot());
     }
 
+    /** Runs the benchmarks given in the command line. */
     private static void runBenchmarks(Args args, BenchmarkProducer benchmarkProducer) throws IOException {
         BackupHelper.backupIfNeeded(args.getOutput());
                 
@@ -161,6 +168,8 @@ public class Main {
         };
     }
     
+    /** Lists all available benchmark suites within the package subhierarchy relative to the package prefix. 
+     */
     private static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites(String packagePrefix) throws InstantiationException, IllegalAccessException {
         Reflections reflections = new Reflections(packagePrefix);
 
