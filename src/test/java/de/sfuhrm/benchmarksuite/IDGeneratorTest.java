@@ -21,7 +21,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-/** Test for {@link Chart}. */
+/** Test for {@link IDGenerator}. */
 public class IDGeneratorTest {
     @Test
     public void testGenerate() {
