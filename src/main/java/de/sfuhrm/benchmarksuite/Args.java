@@ -36,11 +36,11 @@ public class Args {
     private final long DEFAULT_RUN_TIME_SECS = 30;
         
     @Getter
-    @Option(name = "-warmUpTime", aliases = {"-w","-warmup"}, metaVar = "SECS", usage = "Warm up time in seconds for each benchmark. The performance within this is NOT benchmarked.")
+    @Option(name = "-warm-up-time", aliases = {"-w","-warmup","-warmUpTime"}, metaVar = "SECS", usage = "Warm up time in seconds for each benchmark. The performance within this is NOT benchmarked.")
     private long warumUpTime = DEFAULT_WARMUP_TIME_SECS;
     
     @Getter
-    @Option(name = "-runTime", aliases = {"-r","-run"}, metaVar = "SECS", usage = "Run up time in seconds for each benchmark. The performance within this IS benchmarked.")
+    @Option(name = "-run-time", aliases = {"-r","-run","-runTime"}, metaVar = "SECS", usage = "Run up time in seconds for each benchmark. The performance within this IS benchmarked.")
     private long runTime = DEFAULT_RUN_TIME_SECS;
     
     @Getter
@@ -68,7 +68,7 @@ public class Args {
     private boolean listBenchmarks;
     
     @Getter
-    @Option(name = "-checkNano", aliases = {"-C"}, usage = "Check nano timing of JDK")
+    @Option(name = "-check-nano", aliases = {"-C","-checkNano"}, usage = "Check nano timing of JDK")
     private boolean checkNano;
     
     @Getter
