@@ -162,7 +162,7 @@ public class Main {
     }
     
     private static Map<BenchmarkSuite, BenchmarkProducer> getBenchmarkSuites() throws InstantiationException, IllegalAccessException {
-        Reflections reflections = new Reflections("de.tynne.benchmarksuite");
+        Reflections reflections = new Reflections("de.sfuhrm.benchmarksuite");
 
         Set<Class<?>> benchmarkSuites = reflections.getTypesAnnotatedWith(BenchmarkSuite.class);
         
@@ -175,7 +175,7 @@ public class Main {
         return result;
     }
     
-    public static void main(String[] cmdLine) throws Exception {  
+    public static void main(String... cmdLine) throws Exception {  
         Args args = Args.parse(cmdLine);
         if (args == null) {
             return;
