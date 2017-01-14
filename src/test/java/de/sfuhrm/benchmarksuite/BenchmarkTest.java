@@ -16,7 +16,6 @@
 package de.sfuhrm.benchmarksuite;
 
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
