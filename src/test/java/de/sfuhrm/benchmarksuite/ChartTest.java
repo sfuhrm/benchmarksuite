@@ -21,7 +21,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-/** Test for {@link Chart}. */
+/** Test for {@link Chart}. 
+ * @author Stephan Fuhrmann
+ */
 public class ChartTest {
     @Test
     public void testOfWithEmpty() {

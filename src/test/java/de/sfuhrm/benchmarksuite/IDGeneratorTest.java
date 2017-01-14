@@ -19,7 +19,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-/** Test for {@link IDGenerator}. */
+/** Test for {@link IDGenerator}. 
+ * @author Stephan Fuhrmann
+ */
 public class IDGeneratorTest {
     @Test
     public void testGenerate() {

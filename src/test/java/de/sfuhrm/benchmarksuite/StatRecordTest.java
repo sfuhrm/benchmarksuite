@@ -19,7 +19,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-/** Test for {@link StatRecord}. */
+/** Test for {@link StatRecord}. 
+ * @author Stephan Fuhrmann
+ */
 public class StatRecordTest {
     @Test
     public void testInit() {

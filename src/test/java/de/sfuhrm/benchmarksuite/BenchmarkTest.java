@@ -21,7 +21,9 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
-/** Test for {@link Benchmark}. */
+/** Test for {@link Benchmark}. 
+ * @author Stephan Fuhrmann
+ */
 public class BenchmarkTest {
     @Test
     public void testInit() {

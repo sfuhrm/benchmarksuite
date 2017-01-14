@@ -28,6 +28,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+
+/**
+ * Integration test running a whole suite and then checking
+ * whether the produced CSV file looks sane.
+ * @author Stephan Fuhrmann
+ */
 public class IntegrationTest {
 
     @Test
