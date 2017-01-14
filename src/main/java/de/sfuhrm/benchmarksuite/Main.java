@@ -61,12 +61,14 @@ public class Main {
     }
     
     private static void listSuites(Map<BenchmarkSuite, BenchmarkProducer> suites, PrintStream ps) {
-        suites.entrySet().stream().sorted((a, b) -> nameFor(a.getKey(), a.getValue()).compareToIgnoreCase(nameFor(b.getKey(), b.getValue()))).
-                forEach((e) -> {
+        suites
+                .entrySet()
+                .stream()
+                .sorted((a, b) -> nameFor(a.getKey(), a.getValue()).compareToIgnoreCase(nameFor(b.getKey(), b.getValue())))
+                .forEach((e) -> 
                     ps.printf("%s: %s\n",
                             nameFor(e.getKey(), e.getValue()),
-                            e.getKey().enabled());
-                }
+                            e.getKey().enabled() ? "enabled" : "disabled")
                 );
         ps.flush();
     }
@@ -147,25 +149,27 @@ public class Main {
     /** Returns a single suite for benchmarks by name.
      */
     private static Optional<BenchmarkProducer> findByName(String suite, Map<BenchmarkSuite, BenchmarkProducer> suites) {
-        return suites.entrySet().stream().filter(e -> nameFor(e.getKey(), e.getValue()).equalsIgnoreCase(suite)).map(e -> e.getValue()).findFirst();
+        return suites
+                .entrySet()
+                .stream()
+                .filter(e -> nameFor(e.getKey(), e.getValue()).equalsIgnoreCase(suite))
+                .map(e -> e.getValue()).findFirst();
     }
     
     /** Returns a producer for all benchmarks in the named suites.
      */
     private static BenchmarkProducer findAllByName(List<String> suiteNames, Map<BenchmarkSuite, BenchmarkProducer> suites) {
-        List<BenchmarkProducer> benchmarkProducers = suiteNames.stream().
-                map(s -> findByName(s, suites)).
-                filter(bp -> bp.isPresent()).
-                map(o -> o.get()).
-                collect(Collectors.toList());
+        List<BenchmarkProducer> benchmarkProducers = suiteNames.stream()
+                .map(s -> findByName(s, suites))
+                .filter(bp -> bp.isPresent())
+                .map(o -> o.get())
+                .collect(Collectors.toList());
 
-        return () -> {
-            List<Benchmark> result = new ArrayList<>();
-            benchmarkProducers.forEach(bp -> {
-                result.addAll(bp.get());
-            });
-            return result;
-        };
+        return () -> 
+            benchmarkProducers
+                    .stream()
+                    .flatMap(bp -> bp.get().stream())
+                    .collect(Collectors.toList());
     }
     
     /** Lists all available benchmark suites within the package subhierarchy relative to the package prefix. 
