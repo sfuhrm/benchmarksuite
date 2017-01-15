@@ -36,7 +36,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.reflections.Reflections;
 
 /**
- *
+ * Main class that parses the CLI parameters and starts everything.
  * @author Stephan Fuhrmann
  */
 public class Main {
