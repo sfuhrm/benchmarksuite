@@ -17,7 +17,10 @@ package de.sfuhrm.benchmarksuite;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -113,6 +116,18 @@ public class Args {
         }
         
         return result;
+    }
+    
+    /** Formats a number using the {@link Args#decimalDot}. */
+    private String format(double number) {
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+        nf.setGroupingUsed(false);
+        String string = nf.format(number);
+        return string.replaceAll("\\.", getDecimalDot());
+    }
+    
+    Function<Double, String> numberFormatter() {
+        return t -> format(t);
     }
     
     private void logProperties() {

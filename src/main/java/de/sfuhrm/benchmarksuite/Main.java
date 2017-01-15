@@ -29,7 +29,9 @@ import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.reflections.Reflections;
@@ -85,23 +87,17 @@ public class Main {
         LongSummaryStatistics statistics = diffs.stream().mapToLong(l -> l).summaryStatistics();
         
         ps.printf("min=%d, avg=%g, max=%d\n", statistics.getMin(), statistics.getAverage(), statistics.getMax());
-    }
-    
-    /** Formats a number using the {@link Args#decimalDot}. */
-    private static String format(Args args, double number) throws IOException {
-        NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
-        nf.setGroupingUsed(false);
-        String string = nf.format(number);
-        return string.replaceAll("\\.", args.getDecimalDot());
-    }
+    }    
 
     /** Runs the benchmarks given in the command line. */
     private static void runBenchmarks(Args args, BenchmarkProducer benchmarkProducer) throws IOException {
         BackupHelper.backupIfNeeded(args.getOutput());
+        
+        Function<Double,String> format = args.numberFormatter();
                 
         // this looks like NOT comma seperated values, but excel and libreoffice load this automatically
-        final CSVFormat format = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]", "Iterations");
-        try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), format)) {
+        final CSVFormat csvFormat = CSVFormat.EXCEL.withDelimiter(';').withHeader("#", "ID", "Name", "Min [ns]", "Avg [ns]", "Max [ns]", "Chart Pos", "Best Increase [%]", "Iterations");
+        try (CSVPrinter printer = new CSVPrinter(new OutputStreamWriter(new FileOutputStream(args.getOutput()), Charset.forName(args.getCharset())), csvFormat)) {
             List<Benchmark> benchmarks = benchmarkProducer.get();
             List<Benchmark> matching = benchmarks.stream().filter(b -> args.getExecute().matcher(b.getId()).matches()).collect(Collectors.toList());
             BenchmarkRunner benchmarkRunner = new BenchmarkRunner(matching,
@@ -116,14 +112,14 @@ public class Main {
                     printer.print(matching.indexOf(b));
                     printer.print(b.getId());
                     printer.print(b.getName());
-                    printer.print(format(args, statRecord.getMin()));
-                    printer.print(format(args, statRecord.getAverage()));
-                    printer.print(format(args, statRecord.getMax()));
+                    printer.print(format.apply(statRecord.getMin()));
+                    printer.print(format.apply(statRecord.getAverage()));
+                    printer.print(format.apply(statRecord.getMax()));
                     printer.print(chart.getChart().get(b).chartPosition);
                     double bestAvg = chart.getStats().get(chart.getPerformanceChart().get(0)).getAverage();
                     double thisAvg = statRecord.getAverage();
 
-                    printer.print(format(args, 100. * (thisAvg - bestAvg) / bestAvg));
+                    printer.print(format.apply(100. * (thisAvg - bestAvg) / bestAvg));
                     printer.print(statRecord.getCount());
                     printer.println();
                 } catch (IOException ex) {
