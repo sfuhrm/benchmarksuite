@@ -48,21 +48,14 @@ public class Main {
         ps.flush();
     }
     
-    private static String nameFor(BenchmarkSuite benchmarkSuite, BenchmarkProducer benchmarkProducer) {
-        if (benchmarkSuite.name().isEmpty()) {
-            return benchmarkProducer.getClass().getSimpleName();
-        } else
-            return benchmarkSuite.name();
-    }
-    
     private static void listSuites(Map<BenchmarkSuite, BenchmarkProducer> suites, PrintStream ps) {
         suites
                 .entrySet()
                 .stream()
-                .sorted((a, b) -> nameFor(a.getKey(), a.getValue()).compareToIgnoreCase(nameFor(b.getKey(), b.getValue())))
+                .sorted((a, b) -> BenchmarkProducer.nameFor(a.getKey(), a.getValue()).compareToIgnoreCase(BenchmarkProducer.nameFor(b.getKey(), b.getValue())))
                 .forEach((e) -> 
                     ps.printf("%s: %s\n",
-                            nameFor(e.getKey(), e.getValue()),
+                            BenchmarkProducer.nameFor(e.getKey(), e.getValue()),
                             e.getKey().enabled() ? "enabled" : "disabled")
                 );
         ps.flush();
@@ -147,7 +140,7 @@ public class Main {
         return suites
                 .entrySet()
                 .stream()
-                .filter(e -> nameFor(e.getKey(), e.getValue()).equalsIgnoreCase(suite))
+                .filter(e -> BenchmarkProducer.nameFor(e.getKey(), e.getValue()).equalsIgnoreCase(suite))
                 .map(e -> e.getValue()).findFirst();
     }
     

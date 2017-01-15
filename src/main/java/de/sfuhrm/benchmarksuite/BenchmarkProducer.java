@@ -23,4 +23,16 @@ import java.util.function.Supplier;
  * @author Stephan Fuhrmann
  */
 public interface BenchmarkProducer extends Supplier<List<Benchmark>> {
+    
+    /** Gets the name for a benchmark producer.
+     * @param benchmarkSuite the annotation for the suite.
+     * @param benchmarkProducer the benchmark producer.
+     * @return the name of the benchmarkSuite annotation, or the class name of the producer if the annotation name is empty.
+     */
+    static String nameFor(BenchmarkSuite benchmarkSuite, BenchmarkProducer benchmarkProducer) {
+        if (benchmarkSuite.name().isEmpty()) {
+            return benchmarkProducer.getClass().getSimpleName();
+        } else
+            return benchmarkSuite.name();
+    }
 }
