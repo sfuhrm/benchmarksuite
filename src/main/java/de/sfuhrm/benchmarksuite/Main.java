@@ -40,11 +40,6 @@ import org.reflections.Reflections;
  * @author Stephan Fuhrmann
  */
 public class Main {
-
-    private static double standardDeviationOf(DoubleStream doubleStream, double average) {
-        double sum = doubleStream.map(x -> Math.pow(x - average, 2.)).average().getAsDouble();
-        return Math.sqrt(sum);
-    }
     
     private static void listBenchmarks(BenchmarkProducer benchmarkProducer, PrintStream ps) {
         benchmarkProducer.get().stream().forEach((b) -> 
