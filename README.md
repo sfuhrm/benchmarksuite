@@ -1,6 +1,7 @@
 Benchmark Suite 
 ===================
 ![Travis CI Status](https://travis-ci.org/sfuhrm/benchmarksuite.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sfuhrm/benchmarksuite/badge.svg)](https://coveralls.io/github/sfuhrm/benchmarksuite) 
 
 ## What is it?
 
