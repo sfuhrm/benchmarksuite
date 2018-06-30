@@ -1,4 +1,6 @@
-# Benchmark Suite ![Travis CI Status](https://travis-ci.org/sfuhrm/benchmarksuite.svg?branch=master)
+Benchmark Suite 
+===================
+![Travis CI Status](https://travis-ci.org/sfuhrm/benchmarksuite.svg?branch=master)
 
 ## What is it?
 
@@ -54,6 +56,7 @@ The following options are available:
  -warm-up-time (-w, -warmup,            : Warm up time in seconds for each
  -warmUpTime) SECS                        benchmark. The performance within
                                           this is NOT benchmarked. (default: 5)```
+```
 
 ## Example
 
