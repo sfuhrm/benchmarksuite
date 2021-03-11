@@ -1,8 +1,0 @@
-language: java
-
-jdk:
-  - oraclejdk8
-
-after_success:
-  - mvn -DrepoToken=${coveralls_token} clean test jacoco:report coveralls:report
-
