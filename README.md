@@ -2,7 +2,7 @@ Benchmark Suite
 ===================
 [![Java CI with Maven](https://github.com/sfuhrm/benchmarksuite/actions/workflows/maven.yml/badge.svg)](https://github.com/sfuhrm/benchmarksuite/actions/workflows/maven.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a54b168b15a7419f86474394b53c818d)](https://www.codacy.com/gh/sfuhrm/benchmarksuite/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sfuhrm/benchmarksuite&amp;utm_campaign=Badge_Grade)
-[![Coverage Status](https://coveralls.io/repos/github/sfuhrm/benchmarksuite/badge.svg)](https://coveralls.io/github/sfuhrm/benchmarksuite) 
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a54b168b15a7419f86474394b53c818d)](https://www.codacy.com/gh/sfuhrm/benchmarksuite/dashboard?utm_source=github.com&utm_medium=referral&utm_content=sfuhrm/benchmarksuite&utm_campaign=Badge_Coverage)
 
 ## What is it?
 
