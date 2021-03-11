@@ -3,6 +3,7 @@ Benchmark Suite
 [![Java CI with Maven](https://github.com/sfuhrm/benchmarksuite/actions/workflows/maven.yml/badge.svg)](https://github.com/sfuhrm/benchmarksuite/actions/workflows/maven.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a54b168b15a7419f86474394b53c818d)](https://www.codacy.com/gh/sfuhrm/benchmarksuite/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sfuhrm/benchmarksuite&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a54b168b15a7419f86474394b53c818d)](https://www.codacy.com/gh/sfuhrm/benchmarksuite/dashboard?utm_source=github.com&utm_medium=referral&utm_content=sfuhrm/benchmarksuite&utm_campaign=Badge_Coverage)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## What is it?
 
@@ -26,7 +27,7 @@ together are a suite.
 
 ## Usage
 
-Usage is thru the command line. 
+Usage is through the command line.
 
 The following options are available:
 
