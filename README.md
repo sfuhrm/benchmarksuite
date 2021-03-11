@@ -14,7 +14,7 @@ A young framework for executing Java code benchmarks.
 The concept of the suite is to run multiple benchmarks in a row
 and then output the results in CSV format.
 
-Each benchmark run is split into a warmup phase and a run phase.
+Each benchmark run is split into a warmup phase, and a run phase.
 The warmup phase is to fill the cache lines and/or to give the JIT compiler
 of the JDK a little time to compile and optimize the code.
 

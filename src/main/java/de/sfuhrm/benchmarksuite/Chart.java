@@ -16,6 +16,7 @@
 package de.sfuhrm.benchmarksuite;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,44 +25,44 @@ import lombok.Getter;
 
 /**
  * A comparison chart for multiple benchmarks.
- * @see #of(java.util.List) 
+ * @see #of(java.util.List)
  * @author Stephan Fuhrmann
  */
 public class Chart {
-    
+
     /** Single chart entry with comparative content. */
     public static class ChartEntry {
         @Getter
         private Benchmark benchmark;
-        
+
         @Getter
         int chartPosition;
     }
-    
+
     @Getter
     private final Map<Benchmark, StatRecord> stats = new HashMap<>();
-    
+
     @Getter
-    private final Map<Benchmark, ChartEntry> chart = new HashMap<>();    
-    
+    private final Map<Benchmark, ChartEntry> chart = new HashMap<>();
+
     @Getter
     private List<Benchmark> performanceChart;
-    
+
     private final static Function<StatRecord, Number> SORTING_CRITERIUM = StatRecord::getMin;
-    
+
     private Chart() {
     }
-    
+
     public static Chart of(List<Benchmark> benchmarks) {
         Chart result = new Chart();
-        
+
         benchmarks.stream().forEach((b) -> {
             StatRecord statRecord = b.getStatRecord();
             result.stats.put(b, statRecord);
         });
-        
+
         result.performanceChart = new ArrayList<>(benchmarks);
-        result.performanceChart.sort((a,b) -> Double.compare(SORTING_CRITERIUM.apply(result.stats.get(a)).doubleValue(), SORTING_CRITERIUM.apply(result.stats.get(b)).doubleValue()));
+        result.performanceChart.sort(Comparator.comparingDouble(a -> SORTING_CRITERIUM.apply(result.stats.get(a)).doubleValue()));
 
         for (int i=0; i < result.performanceChart.size(); i++) {
             Benchmark b = result.performanceChart.get(i);
@@ -70,7 +71,7 @@ public class Chart {
             ce.chartPosition = i+1;
             result.chart.put(b, ce);
         }
-        
+
         return result;
     }
 }

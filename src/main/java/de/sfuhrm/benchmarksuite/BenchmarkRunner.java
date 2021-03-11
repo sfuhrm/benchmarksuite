@@ -31,25 +31,25 @@ import org.slf4j.MDC;
  * @author Stephan Fuhrmann
  */
 @Slf4j
-public class BenchmarkRunner implements Runnable {    
+public class BenchmarkRunner implements Runnable {
     @Getter
     private final List<Benchmark> benchmarks;
 
-    static final long SEC_IN_NANOS = 1_000_000_000l;
-        
+    static final long SEC_IN_NANOS = 1_000_000_000L;
+
     private final long warmupTimeNanos;
     private final long runTimeNanos;
-    
+
     @Getter
     private final NullBenchmark nullBenchmark;
-    
+
     private final static boolean RUN_NULL_BENCHMARK = true;
-        
+
     public BenchmarkRunner(Collection<Benchmark> in, long warmupTimeNanos, long runTimeNanos) {
         log.debug("Init with {} benchmarks", in.size());
-        
+
         nullBenchmark = new NullBenchmark();
-        
+
         this.benchmarks = new ArrayList<>(in);
         checkIdsUnique(benchmarks);
         if (warmupTimeNanos <= 0) {
@@ -61,32 +61,32 @@ public class BenchmarkRunner implements Runnable {
         }
         this.runTimeNanos = runTimeNanos;
     }
-    
+
     private static void checkIdsUnique(Collection<Benchmark> in) {
         List<String> idList = in.stream().map(b -> b.getId()).collect(Collectors.toList());
         Set<String> idSet = new HashSet<>(idList);
-        
+
         if (idList.size() != idSet.size()) {
             Map<String,Long> histo = idList.stream().collect(Collectors.groupingBy(b -> b, Collectors.counting()));
             List<String> multiList = histo.entrySet().stream().filter(e -> e.getValue() > 1).map(e -> e.getKey()).collect(Collectors.toList());
-            
+
             throw new IllegalArgumentException("Non unique ids: "+multiList);
         }
     }
-    
+
     @Override
     public void run() {
         int progress = 0;
         // all benchmarks plus null
         int total = benchmarks.size() + (RUN_NULL_BENCHMARK ? 1 : 0);
-        
+
         long totalStart = System.nanoTime();
-        
+
         if (RUN_NULL_BENCHMARK) {
             measureBenchmark(nullBenchmark, totalStart, progress, total);
             progress++;
         }
-        
+
         for (Benchmark b : benchmarks) {
             if (RUN_NULL_BENCHMARK) {
                 b.setNullBenchmark(nullBenchmark);
@@ -100,20 +100,20 @@ public class BenchmarkRunner implements Runnable {
     private void measureBenchmark(Benchmark b, long totalStart, int progress, int total) throws IllegalArgumentException {
         MDC.put("benchmark", b.getId());
         log.debug("Benchmark {}: {}", b.getId(), b.getName());
-        
+
         long elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
         printProgress(progress, total,
                 b, elapsed, "WARUMP");
-        
+
         b.reset();
         long start = System.nanoTime();
         while ((System.nanoTime() - start) < warmupTimeNanos) {
             // warm up the jit
             b.run();
         }
-        
+
         log.info("Warmup stats: {}", b);
-        
+
         elapsed = (System.nanoTime() - totalStart) / SEC_IN_NANOS;
         printProgress(progress, total,
                 b, elapsed, "MAIN RUN");
@@ -122,7 +122,7 @@ public class BenchmarkRunner implements Runnable {
         while ((System.nanoTime() - start) < runTimeNanos) {
             b.run();
         }
-        
+
         log.info("Run stats: {}", b);
     }
 
